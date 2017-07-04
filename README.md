@@ -20,23 +20,26 @@ The **Renderer** is a debug window to understand what's happening.
 
 Call
 
-var pages = ExtractText.Read(fileName);
+	var pages = ExtractText.Read(fileName);
 
 to read all the pages.
 
 Then, for every page, call
-Page.DetermineTableStructures();
-Page.DetermineParagraphs();
-Page.FillContent();
+
+	Page.DetermineTableStructures();
+	Page.DetermineParagraphs();
+	Page.FillContent();
 
 To check if you already called the method above, use
-Page.IsRefreshed
+
+	Page.IsRefreshed
 
 After that you'll be able to access to
-Page.Contents
 
-Contents is a collection of IPageContent ordered from top of page to bottom.
-A IPageContent can be a 
+	Page.Contents
+
+Contents is a collection of IPageContent ordered from top of page to bottom.  
+A IPageContent can be a  
 - Paragraph that contains text (Content)
 - Table that contains a matrix of text (Content[,])
 
