@@ -70,7 +70,7 @@ namespace BuildTablesFromPdf.Engine.Tables
             int columnIndex = FindColumnIndex(point.X);
             int rowIndex = Rows.Count - row.Index - 1;
 
-            if (string.IsNullOrEmpty(Content[row.Index, columnIndex]))
+            if (string.IsNullOrEmpty(Content[rowIndex, columnIndex]))
                 Content[rowIndex, columnIndex] = content;
             else
                 Content[rowIndex, columnIndex] += " " + content;
