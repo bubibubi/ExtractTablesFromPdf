@@ -95,14 +95,13 @@ namespace BuildTablesFromPdf.Renderer
             // Aggancio gli eventi che vanno solo in runtime
             this.btnFile.Click += this.OnBtnFileClick;
             this.btnBrowse.Click += this.OnBtnBrowseClick;
-            this.txtFile.KeyDown += new KeyEventHandler(this.OnTextKeyDown);
-            this.txtFile.KeyPress += new KeyPressEventHandler(this.OnTextKeyPress);
-            this.txtFile.TextChanged += new EventHandler(this.OnTextTextChanged);
-            this.txtFile.KeyUp += new KeyEventHandler(this.OnTextKeyUp);
-            this.txtFile.Enter += new EventHandler(this.OnTextEnter);
+            this.txtFile.KeyDown += this.OnTextKeyDown;
+            this.txtFile.KeyPress += this.OnTextKeyPress;
+            this.txtFile.TextChanged += this.OnTextTextChanged;
+            this.txtFile.KeyUp += this.OnTextKeyUp;
+            this.txtFile.Enter += this.OnTextEnter;
+            this.txtFile.DragDrop += this.OnTextDragDrop;
         }
-
-
 
         #endregion
 
@@ -183,6 +182,21 @@ namespace BuildTablesFromPdf.Renderer
             }
         }
 
+
+        private void OnTextDragDrop(object sender, DragEventArgs e)
+        {
+
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Length != 1)
+            {
+                MessageBox.Show("Select only one file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return;
+            }
+
+            txtFile.Text = files[0];
+
+        }
 
         /// <summary>
         /// Consente di aprire la cartella in cui si trova il file specificato

@@ -43,11 +43,12 @@
             this.btnFirst = new System.Windows.Forms.Button();
             this.lblPages = new System.Windows.Forms.Label();
             this.lblPageSummary = new System.Windows.Forms.Label();
+            this.chkTextRealSize = new System.Windows.Forms.CheckBox();
             this.chkText = new System.Windows.Forms.CheckBox();
             this.chkParagraphs = new System.Windows.Forms.CheckBox();
             this.chkTables = new System.Windows.Forms.CheckBox();
             this.chkLines = new System.Windows.Forms.CheckBox();
-            this.chkTextRealSize = new System.Windows.Forms.CheckBox();
+            this.btnCheckAllPages = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -62,6 +63,7 @@
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer.Panel1.Controls.Add(this.btnCheckAllPages);
             this.splitContainer.Panel1.Controls.Add(this.btnViewRawContent);
             this.splitContainer.Panel1.Controls.Add(this.btnRead);
             this.splitContainer.Panel1.Controls.Add(this.fileOpen);
@@ -230,6 +232,17 @@
             this.lblPageSummary.TabIndex = 1;
             this.lblPageSummary.Text = "label1";
             // 
+            // chkTextRealSize
+            // 
+            this.chkTextRealSize.AutoSize = true;
+            this.chkTextRealSize.Location = new System.Drawing.Point(93, 147);
+            this.chkTextRealSize.Name = "chkTextRealSize";
+            this.chkTextRealSize.Size = new System.Drawing.Size(69, 17);
+            this.chkTextRealSize.TabIndex = 0;
+            this.chkTextRealSize.Text = "Real size";
+            this.chkTextRealSize.UseVisualStyleBackColor = true;
+            this.chkTextRealSize.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
+            // 
             // chkText
             // 
             this.chkText.AutoSize = true;
@@ -280,16 +293,15 @@
             this.chkLines.UseVisualStyleBackColor = true;
             this.chkLines.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
             // 
-            // chkTextRealSize
+            // btnCheckAllPages
             // 
-            this.chkTextRealSize.AutoSize = true;
-            this.chkTextRealSize.Location = new System.Drawing.Point(93, 147);
-            this.chkTextRealSize.Name = "chkTextRealSize";
-            this.chkTextRealSize.Size = new System.Drawing.Size(69, 17);
-            this.chkTextRealSize.TabIndex = 0;
-            this.chkTextRealSize.Text = "Real size";
-            this.chkTextRealSize.UseVisualStyleBackColor = true;
-            this.chkTextRealSize.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
+            this.btnCheckAllPages.Location = new System.Drawing.Point(192, 107);
+            this.btnCheckAllPages.Name = "btnCheckAllPages";
+            this.btnCheckAllPages.Size = new System.Drawing.Size(104, 23);
+            this.btnCheckAllPages.TabIndex = 8;
+            this.btnCheckAllPages.Text = "Check all pages";
+            this.btnCheckAllPages.UseVisualStyleBackColor = true;
+            this.btnCheckAllPages.Click += new System.EventHandler(this.btnCheckAllPages_Click);
             // 
             // frmRenderer
             // 
@@ -330,6 +342,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnViewRawContent;
         private System.Windows.Forms.CheckBox chkTextRealSize;
+        private System.Windows.Forms.Button btnCheckAllPages;
     }
 }
 

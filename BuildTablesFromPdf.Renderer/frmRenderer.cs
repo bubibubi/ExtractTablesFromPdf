@@ -92,7 +92,7 @@ namespace BuildTablesFromPdf.Renderer
 
                             foreach (Column column in tableStructure.Columns)
                                 g.FillRectangle(Brushes.OrangeRed, column.BeginX + 5, pageHeight - tableStructure.BottomRightPoint.Y + 5, 4, 4);
-                            
+
                         }
                         else
                         {
@@ -114,7 +114,7 @@ namespace BuildTablesFromPdf.Renderer
                 if (chkParagraphs.Checked)
                 {
                     foreach (Paragraph paragraph in CurrentPage.Paragraphs)
-                        g.FillRectangle(Brushes.OrangeRed, 0,pageHeight - paragraph.Y + 5, 10, 4);
+                        g.FillRectangle(Brushes.OrangeRed, 0, pageHeight - paragraph.Y + 5, 10, 4);
                 }
 
                 if (chkText.Checked)
@@ -201,5 +201,17 @@ namespace BuildTablesFromPdf.Renderer
             new frmNotepad().Start(textFromPage);
 
         }
+
+        private void btnCheckAllPages_Click(object sender, EventArgs e)
+        {
+            foreach (Page page in _pages.Where(_ => !_.IsRefreshed))
+            {
+                page.DetermineTableStructures();
+                page.DetermineParagraphs();
+                page.FillContent();
+            }
+        }
+
+
     }
 }
