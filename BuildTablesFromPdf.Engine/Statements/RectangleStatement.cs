@@ -22,10 +22,12 @@ namespace BuildTablesFromPdf.Engine.Statements
             var lines = new List<Line>();
             if (Corner != new Point(Corner.X + Width, Corner.Y))
                 lines.Add(new Line(Corner, new Point(Corner.X + Width, Corner.Y)));
-            lines.Add(new Line(new Point(Corner.X + Width, Corner.Y), new Point(Corner.X + Width, Corner.Y + Height)));
+            if (new Point(Corner.X + Width, Corner.Y) != new Point(Corner.X + Width, Corner.Y + Height))
+                lines.Add(new Line(new Point(Corner.X + Width, Corner.Y), new Point(Corner.X + Width, Corner.Y + Height)));
             if (new Point(Corner.X , Corner.Y + Height) != new Point(Corner.X + Width, Corner.Y + Height))
                 lines.Add(new Line(new Point(Corner.X , Corner.Y + Height), new Point(Corner.X + Width, Corner.Y + Height)));
-            lines.Add(new Line(Corner, new Point(Corner.X , Corner.Y + Height)));
+            if (Corner != new Point(Corner.X, Corner.Y + Height))
+                lines.Add(new Line(Corner, new Point(Corner.X, Corner.Y + Height)));
             return lines;
         }
     }
