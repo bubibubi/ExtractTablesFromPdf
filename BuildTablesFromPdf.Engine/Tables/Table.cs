@@ -91,7 +91,10 @@ namespace BuildTablesFromPdf.Engine.Tables
             if ( BottomRightPoint.X < x)
                 return Columns.Count + 1;
 
-            var column = Columns.Single(_ => _.BeginX <= x && x <= _.EndX);
+            Column column = Columns.SingleOrDefault(_ => _.BeginX <= x && x <= _.EndX);
+
+            if (column == null)
+                column = Columns.OrderBy(_ => _.Index).Last(_ => x <= _.EndX);
 
             return column.Index + 1;
         }
@@ -104,7 +107,10 @@ namespace BuildTablesFromPdf.Engine.Tables
         /// <returns>The row or null if y is outside the table</returns>
         private Row FindRow(float y)
         {
-            return Rows.FirstOrDefault(_ => _.BeginY <= y && y <= _.EndY);
+            Row row = Rows.FirstOrDefault(_ => _.BeginY <= y && y <= _.EndY);
+            if (row == null)
+                row = Rows.FirstOrDefault(_ => _.BeginY - Line.Tolerance <= y && y <= _.EndY + Line.Tolerance);
+            return row;
         }
 
         float IPageContent.Y { get { return TopLeftPoint.Y; }}

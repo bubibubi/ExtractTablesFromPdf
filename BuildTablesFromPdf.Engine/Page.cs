@@ -139,14 +139,14 @@ namespace BuildTablesFromPdf.Engine
             {
                 // Fix EndYs
                 for (int i = 0; i < tableStructure.Rows.Count - 1; i++)
-                    tableStructure.Rows[i].EndY = tableStructure.Rows[i + 1].BeginY - Line.Tolerance * 1.1f;
+                    tableStructure.Rows[i].EndY = tableStructure.Rows[i + 1].BeginY - Line.Tolerance * 0.1f;
 
                 tableStructure.Rows[tableStructure.Rows.Count - 1].EndY = tableStructure.BottomRightPoint.Y;
 
 
                 // Fix EndXs
                 for (int i = 0; i < tableStructure.Columns.Count - 1; i++)
-                    tableStructure.Columns[i].EndX = tableStructure.Columns[i + 1].BeginX - Line.Tolerance * 1.1f;
+                    tableStructure.Columns[i].EndX = tableStructure.Columns[i + 1].BeginX - Line.Tolerance * 0.1f;
 
                 tableStructure.Columns[tableStructure.Columns.Count - 1].EndX = tableStructure.BottomRightPoint.X;
 
