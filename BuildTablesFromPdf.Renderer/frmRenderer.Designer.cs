@@ -30,9 +30,9 @@
         {
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnCheckAllPages = new System.Windows.Forms.Button();
             this.btnViewRawContent = new System.Windows.Forms.Button();
             this.btnRead = new System.Windows.Forms.Button();
-            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPageContent = new System.Windows.Forms.TextBox();
             this.txtPage = new System.Windows.Forms.TextBox();
@@ -48,7 +48,7 @@
             this.chkParagraphs = new System.Windows.Forms.CheckBox();
             this.chkTables = new System.Windows.Forms.CheckBox();
             this.chkLines = new System.Windows.Forms.CheckBox();
-            this.btnCheckAllPages = new System.Windows.Forms.Button();
+            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -85,6 +85,7 @@
             // 
             // splitContainer.Panel2
             // 
+            this.splitContainer.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.splitContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer_Panel2_Paint);
             this.splitContainer.Size = new System.Drawing.Size(695, 456);
             this.splitContainer.SplitterDistance = 311;
@@ -92,14 +93,28 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(12, 52);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(284, 7);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             // 
+            // btnCheckAllPages
+            // 
+            this.btnCheckAllPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCheckAllPages.Location = new System.Drawing.Point(192, 107);
+            this.btnCheckAllPages.Name = "btnCheckAllPages";
+            this.btnCheckAllPages.Size = new System.Drawing.Size(104, 23);
+            this.btnCheckAllPages.TabIndex = 8;
+            this.btnCheckAllPages.Text = "Check all pages";
+            this.btnCheckAllPages.UseVisualStyleBackColor = true;
+            this.btnCheckAllPages.Click += new System.EventHandler(this.btnCheckAllPages_Click);
+            // 
             // btnViewRawContent
             // 
+            this.btnViewRawContent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnViewRawContent.Location = new System.Drawing.Point(192, 78);
             this.btnViewRawContent.Name = "btnViewRawContent";
             this.btnViewRawContent.Size = new System.Drawing.Size(104, 23);
@@ -118,21 +133,6 @@
             this.btnRead.Text = "Read";
             this.btnRead.UseVisualStyleBackColor = true;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
-            // 
-            // fileOpen
-            // 
-            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileOpen.BrowserCaption = "";
-            this.fileOpen.DefaultExtension = "";
-            this.fileOpen.FileFilters = "";
-            this.fileOpen.Folder = "";
-            this.fileOpen.Location = new System.Drawing.Point(12, 26);
-            this.fileOpen.Name = "fileOpen";
-            this.fileOpen.ReadOnly = false;
-            this.fileOpen.Size = new System.Drawing.Size(228, 20);
-            this.fileOpen.TabIndex = 6;
-            this.fileOpen.Value = null;
             // 
             // label1
             // 
@@ -293,15 +293,20 @@
             this.chkLines.UseVisualStyleBackColor = true;
             this.chkLines.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
             // 
-            // btnCheckAllPages
+            // fileOpen
             // 
-            this.btnCheckAllPages.Location = new System.Drawing.Point(192, 107);
-            this.btnCheckAllPages.Name = "btnCheckAllPages";
-            this.btnCheckAllPages.Size = new System.Drawing.Size(104, 23);
-            this.btnCheckAllPages.TabIndex = 8;
-            this.btnCheckAllPages.Text = "Check all pages";
-            this.btnCheckAllPages.UseVisualStyleBackColor = true;
-            this.btnCheckAllPages.Click += new System.EventHandler(this.btnCheckAllPages_Click);
+            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileOpen.BrowserCaption = "";
+            this.fileOpen.DefaultExtension = "";
+            this.fileOpen.FileFilters = "";
+            this.fileOpen.Folder = "";
+            this.fileOpen.Location = new System.Drawing.Point(12, 26);
+            this.fileOpen.Name = "fileOpen";
+            this.fileOpen.ReadOnly = false;
+            this.fileOpen.Size = new System.Drawing.Size(228, 20);
+            this.fileOpen.TabIndex = 6;
+            this.fileOpen.Value = null;
             // 
             // frmRenderer
             // 

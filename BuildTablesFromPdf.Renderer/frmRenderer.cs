@@ -64,7 +64,7 @@ namespace BuildTablesFromPdf.Renderer
             using (var g = splitContainer.Panel2.CreateGraphics())
             {
 
-                g.Clear(this.BackColor);
+                g.Clear(splitContainer.Panel2.BackColor);
 
                 if (chkLines.Checked)
                 {
