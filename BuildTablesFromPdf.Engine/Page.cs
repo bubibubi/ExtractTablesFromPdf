@@ -305,7 +305,7 @@ namespace BuildTablesFromPdf.Engine
 
             foreach (var line in textObjectStatementsLines.Where(_ => _.Position.IsValid()))
             {
-                IPageContent targetPageContent = Contents.Single(_ => _.Contains(line.Position.Y));
+                IPageContent targetPageContent = Contents.First(_ => _.Contains(line.Position.Y));
                 targetPageContent.AddText(line.Position, line.Content);
             }
         }

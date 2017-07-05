@@ -28,17 +28,18 @@ namespace BuildTablesFromPdf.Engine
 
                 Matrix transformMatrix = Matrix.Identity;
 
-                string textFromPage = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, pdfReader.GetPageContent(i + 1)));
-                var lines = textFromPage.Split(new[] {"\n"}, StringSplitOptions.None);
-
-                foreach (string line in lines)
+                string rawPdfContent = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, pdfReader.GetPageContent(i + 1)));
+                int pointer = 0;
+                
+                string statement = Statement.GetNextStatement(rawPdfContent, ref pointer);
+                while (statement != null)
                 {
-                    if (line == "BT")
+                    if (statement == "BT")
                     {
                         currentMultilineStatement = new TextObjectStatement();
                         page.Statements.Add(currentMultilineStatement);
                     }
-                    else if (line == "ET")
+                    else if (statement == "ET")
                     {
                         if (!(currentMultilineStatement is TextObjectStatement))
                             pages.Errors.Add("ET outside a text object");
@@ -50,84 +51,86 @@ namespace BuildTablesFromPdf.Engine
                     }
                     else if (currentMultilineStatement != null)
                     {
-                        currentMultilineStatement.RawContent.Add(line);
+                        currentMultilineStatement.RawContent.Add(statement);
                     }
-                    else if (line == "q")
+                    else if (statement == "q")
                     {
                         page.Statements.Add(PushGraphicStateStatement.Value);
                     }
-                    else if (line == "Q")
+                    else if (statement == "Q")
                     {
                         page.Statements.Add(PopGraphicStateStatement.Value);
                     }
-                    else if (line.EndsWith(" cm"))
+                    else if (statement.EndsWith(" cm"))
                     {
-                        page.Statements.Add(new ModifyMatrixStatement(line));
+                        page.Statements.Add(new ModifyMatrixStatement(statement));
                         Matrix newTransformMatrix;
-                        if (!Matrix.TryParse(line, out newTransformMatrix))
+                        if (!Matrix.TryParse(statement, out newTransformMatrix))
                             newTransformMatrix = Matrix.Identity;
                         transformMatrix *= newTransformMatrix;
                     }
-                    else if (line.EndsWith(" J"))
+                    else if (statement.EndsWith(" J"))
                     {
-                        page.Statements.Add(new LineCapStyleStatement(line));
+                        page.Statements.Add(new LineCapStyleStatement(statement));
                     }
-                    else if (line.EndsWith(" j"))
+                    else if (statement.EndsWith(" j"))
                     {
-                        page.Statements.Add(new LineJoinStyleStatement(line));
+                        page.Statements.Add(new LineJoinStyleStatement(statement));
                     }
-                    else if (line.EndsWith(" rg"))
+                    else if (statement.EndsWith(" rg"))
                     {
-                        page.Statements.Add(new NonStrokingColorStatement(line));
+                        page.Statements.Add(new NonStrokingColorStatement(statement));
                     }
-                    else if (line.EndsWith(" RG"))
+                    else if (statement.EndsWith(" RG"))
                     {
-                        page.Statements.Add(new StrokingColorStatement(line));
+                        page.Statements.Add(new StrokingColorStatement(statement));
                     }
-                    else if (line.EndsWith(" G"))
+                    else if (statement.EndsWith(" G"))
                     {
-                        page.Statements.Add(new GreyColorStatement(line));
+                        page.Statements.Add(new GreyColorStatement(statement));
                     }
-                    else if (line.EndsWith(" m"))
+                    else if (statement.EndsWith(" m"))
                     {
-                        page.Statements.Add(new SetPointStatement(line));
+                        page.Statements.Add(new SetPointStatement(statement));
                     }
-                    else if (line.EndsWith(" l"))
+                    else if (statement.EndsWith(" l"))
                     {
-                        page.Statements.Add(new LineToStatement(line));
+                        page.Statements.Add(new LineToStatement(statement));
                     }
-                    else if (line.EndsWith(" c"))
+                    else if (statement.EndsWith(" c"))
                     {
-                        page.Statements.Add(new BezierCurveStatement(line));
+                        page.Statements.Add(new BezierCurveStatement(statement));
                     }
-                    else if (line.EndsWith(" d"))
+                    else if (statement.EndsWith(" d"))
                     {
-                        page.Statements.Add(new SetLineDashPatternStatement(line));
+                        page.Statements.Add(new SetLineDashPatternStatement(statement));
                     }
-                    else if (line.EndsWith(" w"))
+                    else if (statement.EndsWith(" w"))
                     {
-                        page.Statements.Add(new SetLineWidthStatement(line));
+                        page.Statements.Add(new SetLineWidthStatement(statement));
                     }
-                    else if (line.EndsWith(" re"))
+                    else if (statement.EndsWith(" re"))
                     {
-                        page.Statements.Add(new RectangleStatement(line));
+                        page.Statements.Add(new RectangleStatement(statement));
                     }
-                    else if (line == "S")
+                    else if (statement == "S")
                     {
                         page.Statements.Add(StrokePathStatement.Value);
                     }
-                    else if (line == "s")
+                    else if (statement == "s")
                     {
                         page.Statements.Add(CloseStrokePathStatement.Value);
                     }
-                    else if (line == "f")
+                    else if (statement == "f")
                     {
                         page.Statements.Add(FillPathStatement.Value);
                     }
                     else
                     {
-                        Console.WriteLine(line);
+                        Console.WriteLine(statement);
                     }
+
+                    statement = Statement.GetNextStatement(rawPdfContent, ref pointer);
                 }
 
                 pages.Add(page);
@@ -135,7 +138,5 @@ namespace BuildTablesFromPdf.Engine
 
             return pages;
         }
-
-
     }
 }

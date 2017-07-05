@@ -46,6 +46,12 @@
     <Compile Include="IPageContent.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Paragraph.cs" />
+    <Compile Include="PdfDataTypes\PdfArrayDataType.cs" />
+    <Compile Include="PdfDataTypes\PdfHexStringDataType.cs" />
+    <Compile Include="PdfDataTypes\PdfBooleanDataType.cs" />
+    <Compile Include="PdfDataTypes\PdfObjectDataType.cs" />
+    <Compile Include="PdfDataTypes\PdfNumericDataType.cs" />
+    <Compile Include="PdfDataTypes\PdfStringDataType.cs" />
     <Compile Include="Statements\TextObjectStatementLine.cs" />
     <Compile Include="Tables\Column.cs" />
     <Compile Include="ExtractText.cs" />
