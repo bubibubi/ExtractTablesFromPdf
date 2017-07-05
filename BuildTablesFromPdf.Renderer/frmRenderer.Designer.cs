@@ -29,7 +29,10 @@
         private void InitializeComponent()
         {
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnViewRawContent = new System.Windows.Forms.Button();
             this.btnRead = new System.Windows.Forms.Button();
+            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPageContent = new System.Windows.Forms.TextBox();
             this.txtPage = new System.Windows.Forms.TextBox();
@@ -44,9 +47,7 @@
             this.chkParagraphs = new System.Windows.Forms.CheckBox();
             this.chkTables = new System.Windows.Forms.CheckBox();
             this.chkLines = new System.Windows.Forms.CheckBox();
-            this.btnViewRawContent = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
+            this.chkTextRealSize = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -74,6 +75,7 @@
             this.splitContainer.Panel1.Controls.Add(this.btnFirst);
             this.splitContainer.Panel1.Controls.Add(this.lblPages);
             this.splitContainer.Panel1.Controls.Add(this.lblPageSummary);
+            this.splitContainer.Panel1.Controls.Add(this.chkTextRealSize);
             this.splitContainer.Panel1.Controls.Add(this.chkText);
             this.splitContainer.Panel1.Controls.Add(this.chkParagraphs);
             this.splitContainer.Panel1.Controls.Add(this.chkTables);
@@ -86,6 +88,24 @@
             this.splitContainer.SplitterDistance = 311;
             this.splitContainer.TabIndex = 0;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(12, 52);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(284, 7);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            // 
+            // btnViewRawContent
+            // 
+            this.btnViewRawContent.Location = new System.Drawing.Point(192, 78);
+            this.btnViewRawContent.Name = "btnViewRawContent";
+            this.btnViewRawContent.Size = new System.Drawing.Size(104, 23);
+            this.btnViewRawContent.TabIndex = 8;
+            this.btnViewRawContent.Text = "View raw content";
+            this.btnViewRawContent.UseVisualStyleBackColor = true;
+            this.btnViewRawContent.Click += new System.EventHandler(this.btnViewRawContent_Click);
+            // 
             // btnRead
             // 
             this.btnRead.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -96,6 +116,21 @@
             this.btnRead.Text = "Read";
             this.btnRead.UseVisualStyleBackColor = true;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
+            // 
+            // fileOpen
+            // 
+            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileOpen.BrowserCaption = "";
+            this.fileOpen.DefaultExtension = "";
+            this.fileOpen.FileFilters = "";
+            this.fileOpen.Folder = "";
+            this.fileOpen.Location = new System.Drawing.Point(12, 26);
+            this.fileOpen.Name = "fileOpen";
+            this.fileOpen.ReadOnly = false;
+            this.fileOpen.Size = new System.Drawing.Size(228, 20);
+            this.fileOpen.TabIndex = 6;
+            this.fileOpen.Value = null;
             // 
             // label1
             // 
@@ -245,38 +280,16 @@
             this.chkLines.UseVisualStyleBackColor = true;
             this.chkLines.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
             // 
-            // btnViewRawContent
+            // chkTextRealSize
             // 
-            this.btnViewRawContent.Location = new System.Drawing.Point(192, 78);
-            this.btnViewRawContent.Name = "btnViewRawContent";
-            this.btnViewRawContent.Size = new System.Drawing.Size(104, 23);
-            this.btnViewRawContent.TabIndex = 8;
-            this.btnViewRawContent.Text = "View raw content";
-            this.btnViewRawContent.UseVisualStyleBackColor = true;
-            this.btnViewRawContent.Click += new System.EventHandler(this.btnViewRawContent_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Location = new System.Drawing.Point(12, 52);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(284, 7);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            // 
-            // fileOpen
-            // 
-            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileOpen.BrowserCaption = "";
-            this.fileOpen.DefaultExtension = "";
-            this.fileOpen.FileFilters = "";
-            this.fileOpen.Folder = "";
-            this.fileOpen.Location = new System.Drawing.Point(12, 26);
-            this.fileOpen.Name = "fileOpen";
-            this.fileOpen.ReadOnly = false;
-            this.fileOpen.Size = new System.Drawing.Size(228, 20);
-            this.fileOpen.TabIndex = 6;
-            this.fileOpen.Value = null;
+            this.chkTextRealSize.AutoSize = true;
+            this.chkTextRealSize.Location = new System.Drawing.Point(93, 147);
+            this.chkTextRealSize.Name = "chkTextRealSize";
+            this.chkTextRealSize.Size = new System.Drawing.Size(69, 17);
+            this.chkTextRealSize.TabIndex = 0;
+            this.chkTextRealSize.Text = "Real size";
+            this.chkTextRealSize.UseVisualStyleBackColor = true;
+            this.chkTextRealSize.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
             // 
             // frmRenderer
             // 
@@ -316,6 +329,7 @@
         private FileOpen fileOpen;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnViewRawContent;
+        private System.Windows.Forms.CheckBox chkTextRealSize;
     }
 }
 

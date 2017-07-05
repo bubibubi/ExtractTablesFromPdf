@@ -56,7 +56,7 @@ namespace BuildTablesFromPdf.Renderer
 
         private void RedrawLines()
         {
-            int pageHeight = 600;
+            int pageHeight = splitContainer.Panel2.Height;
 
             if (CurrentPage == null)
                 return;
@@ -69,10 +69,10 @@ namespace BuildTablesFromPdf.Renderer
                 if (chkLines.Checked)
                 {
                     foreach (Line line in CurrentPage.AllLines)
-                        g.DrawLine(Pens.Black, line.StartPoint.X, pageHeight - line.StartPoint.Y, line.EndPoint.X, pageHeight - line.EndPoint.Y);
+                        g.DrawLine(Pens.DarkGray, line.StartPoint.X, pageHeight - line.StartPoint.Y, line.EndPoint.X, pageHeight - line.EndPoint.Y);
 
                     foreach (Line line in CurrentPage.JoinedHorizontalLines)
-                        g.DrawLine(Pens.Red, line.StartPoint.X + 2, pageHeight - line.StartPoint.Y + 2, line.EndPoint.X + 2, pageHeight - line.EndPoint.Y + 2);
+                        g.DrawLine(Pens.Blue, line.StartPoint.X + 2, pageHeight - line.StartPoint.Y + 2, line.EndPoint.X + 2, pageHeight - line.EndPoint.Y + 2);
 
                     foreach (Line line in CurrentPage.JoinedVerticalLines)
                         g.DrawLine(Pens.Blue, line.StartPoint.X + 2, pageHeight - line.StartPoint.Y + 2, line.EndPoint.X + 2, pageHeight - line.EndPoint.Y + 2);
@@ -82,26 +82,56 @@ namespace BuildTablesFromPdf.Renderer
                 {
                     foreach (Table tableStructure in CurrentPage.Tables)
                     {
-                        g.DrawRectangle(Pens.Yellow, tableStructure.TopLeftPoint.X + 4, pageHeight - tableStructure.BottomRightPoint.Y + 4, tableStructure.Width, tableStructure.Heigth);
+                        g.DrawRectangle(Pens.OrangeRed, tableStructure.TopLeftPoint.X + 4, pageHeight - tableStructure.BottomRightPoint.Y + 4, tableStructure.Width, tableStructure.Heigth);
 
-                        foreach (Row row in tableStructure.Rows)
-                            g.FillRectangle(Brushes.OrangeRed, tableStructure.TopLeftPoint.X + 5, pageHeight - row.EndY + 5, 4, 4);
+                        if (chkLines.Checked)
+                        {
+                            // To avoid too many lines
+                            foreach (Row row in tableStructure.Rows)
+                                g.FillRectangle(Brushes.OrangeRed, tableStructure.TopLeftPoint.X + 5, pageHeight - row.EndY + 5, 4, 4);
 
-                        foreach (Column column in tableStructure.Columns)
-                            g.FillRectangle(Brushes.OrangeRed, column.BeginX + 5, pageHeight - tableStructure.BottomRightPoint.Y + 5, 4, 4);
+                            foreach (Column column in tableStructure.Columns)
+                                g.FillRectangle(Brushes.OrangeRed, column.BeginX + 5, pageHeight - tableStructure.BottomRightPoint.Y + 5, 4, 4);
+                            
+                        }
+                        else
+                        {
+                            for (int i = 0; i < tableStructure.Rows.Count - 1; i++)
+                            {
+                                Row row = tableStructure.Rows[i];
+                                g.DrawLine(Pens.OrangeRed, tableStructure.TopLeftPoint.X + 5, pageHeight - row.EndY + 5, tableStructure.BottomRightPoint.X + 5, pageHeight - row.EndY + 5);
+                            }
+
+                            for (int i = 1; i < tableStructure.Columns.Count; i++)
+                            {
+                                Column column = tableStructure.Columns[i];
+                                g.DrawLine(Pens.OrangeRed, column.BeginX + 5, pageHeight - tableStructure.BottomRightPoint.Y + 5, column.BeginX + 5, pageHeight - tableStructure.TopLeftPoint.Y + 5);
+                            }
+                        }
                     }
                 }
 
                 if (chkParagraphs.Checked)
                 {
                     foreach (Paragraph paragraph in CurrentPage.Paragraphs)
-                        g.FillRectangle(Brushes.OrangeRed, 0,pageHeight - paragraph.Y+ 5, 10, 4);
+                        g.FillRectangle(Brushes.OrangeRed, 0,pageHeight - paragraph.Y + 5, 10, 4);
                 }
 
                 if (chkText.Checked)
                 {
-                    foreach (var line in CurrentPage.Statements.Where(_ => _ is TextObjectStatement).Cast<TextObjectStatement>().SelectMany(_ => _.Lines))
-                        g.DrawString(line.Content, this.Font, Brushes.Black, line.Position.X, pageHeight - line.Position.Y);
+                    if (chkTextRealSize.Checked)
+                    {
+                        foreach (var line in CurrentPage.Statements.Where(_ => _ is TextObjectStatement).Cast<TextObjectStatement>().SelectMany(_ => _.Lines).Where(_ => _.FontHeight > 0))
+                        {
+                            Font font = new Font("Arial", line.FontHeight * 0.7f);
+                            g.DrawString(line.Content, font, Brushes.Black, line.Position.X + 4, pageHeight - line.Position.Y + 4);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var line in CurrentPage.Statements.Where(_ => _ is TextObjectStatement).Cast<TextObjectStatement>().SelectMany(_ => _.Lines))
+                            g.DrawString(line.Content, this.Font, Brushes.Black, line.Position.X + 4, pageHeight - line.Position.Y + 4);
+                    }
                 }
             }
         }
