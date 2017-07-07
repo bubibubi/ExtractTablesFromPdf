@@ -27,6 +27,8 @@ namespace BuildTablesFromPdf.Renderer
             base.OnLoad(e);
 
             fileOpen.Value = Properties.Settings.Default.FileName;
+
+            splitContainer.Panel2.MouseWheel += splitContainer_Panel2_MouseWheel;
         }
 
         private void ShowDocument(string fileName)
@@ -153,14 +155,32 @@ namespace BuildTablesFromPdf.Renderer
 
         private void btnPrevious_Click(object sender, EventArgs e)
         {
-            if (CurrentPage.Index > 0)
-                DrawPage(CurrentPage.Index - 1);
+            MovePreviousPage();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (CurrentPage.Index < _pages.Count - 1)
+            MoveNextPage();
+        }
+
+        private void splitContainer_Panel2_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta < 0)
+                MoveNextPage();
+            else if (e.Delta > 0)
+                MovePreviousPage();
+        }
+
+        private void MoveNextPage()
+        {
+            if (CurrentPage != null && CurrentPage.Index < _pages.Count - 1)
                 DrawPage(CurrentPage.Index + 1);
+        }
+
+        private void MovePreviousPage()
+        {
+            if (CurrentPage != null && CurrentPage.Index > 0)
+                DrawPage(CurrentPage.Index - 1);
         }
 
         private void btnLast_Click(object sender, EventArgs e)
