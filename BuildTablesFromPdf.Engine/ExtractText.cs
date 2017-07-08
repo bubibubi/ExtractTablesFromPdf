@@ -8,6 +8,9 @@ namespace BuildTablesFromPdf.Engine
 {
     public class ExtractText
     {
+
+        public static bool ShowParserInfo = false;
+
         public static PageCollection Read(string filePath)
         {
 
@@ -19,8 +22,8 @@ namespace BuildTablesFromPdf.Engine
 
             for (int i = 0; i < pdfReader.NumberOfPages; i++)
             {
-
-                Console.WriteLine("Page {0} ========================================================", i + 1);
+                if (ShowParserInfo)
+                    Console.WriteLine("Page {0} ========================================================", i + 1);
 
                 var page = new Page();
                 page.Index = pages.Count;
@@ -127,7 +130,8 @@ namespace BuildTablesFromPdf.Engine
                     }
                     else
                     {
-                        Console.WriteLine(statement);
+                        if (ShowParserInfo)
+                            Console.WriteLine(statement);
                     }
 
                     statement = Statement.GetNextStatement(rawPdfContent, ref pointer);
