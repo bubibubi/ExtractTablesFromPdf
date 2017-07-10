@@ -23,7 +23,64 @@ namespace BuildTablesFromPdf.Engine.Tables
         public float Width { get { return BottomRightPoint.X - TopLeftPoint.X; } }
         public float Heigth { get { return BottomRightPoint.Y - TopLeftPoint.Y; }}
 
-        public string[,] Content { get; private set; }
+        private string[,] _Content;
+
+        public string this[int row, int column] 
+        { 
+            get { return _Content[row, column]; } 
+            set { _Content[row, column] = value; }
+        }
+
+        public string this[int row, string columnName]
+        {
+            get
+            {
+                return _Content[row, GetColumnIndex(columnName)];
+            }
+            set
+            {
+                _Content[row, GetColumnIndex(columnName)] = value;
+            }
+        }
+
+        public bool ColumnExists(string columnName)
+        {
+            if (columnName == "<" || columnName == ">")
+                return true;
+
+            for (int i = 1; i < _Content.GetLength(1) - 1; i++)
+            {
+                if (String.Equals(_Content[0, i].Trim(), columnName, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+            return false;
+        }
+
+        public string GetValueOrNull(int row, string columnName)
+        {
+            if (!ColumnExists(columnName))
+                return null;
+            return this[row, GetColumnIndex(columnName)];
+        }
+
+        private int GetColumnIndex(string columnName)
+        {
+            if (columnName == "<")
+                return 0;
+
+            if (columnName == ">")
+                return _Content.GetLength(1) - 1;
+
+            for (int i = 1; i < _Content.GetLength(1) - 1; i++)
+            {
+                if (String.Equals(_Content[0, i].Trim(), columnName, StringComparison.CurrentCultureIgnoreCase))
+                    return i;
+            }
+            
+            throw new ArgumentException(string.Format("Column '{0}' not found", columnName), "columnName");
+
+        }
+
 
         public bool Contains(Line line)
         {
@@ -54,12 +111,12 @@ namespace BuildTablesFromPdf.Engine.Tables
 
         internal void CreateContent()
         {
-            Content = new string[Rows.Count, Columns.Count + 2];
+            _Content = new string[Rows.Count, Columns.Count + 2];
         }
 
         public void AddText(Point point, string content)
         {
-            if (Content == null)
+            if (_Content == null)
                 throw new InvalidOperationException("Content is not initialized. Please call CreateContent first");
 
             // The text can be also on the left or on the right of the table
@@ -70,10 +127,10 @@ namespace BuildTablesFromPdf.Engine.Tables
             int columnIndex = FindColumnIndex(point.X);
             int rowIndex = Rows.Count - row.Index - 1;
 
-            if (string.IsNullOrEmpty(Content[rowIndex, columnIndex]))
-                Content[rowIndex, columnIndex] = content;
+            if (string.IsNullOrEmpty(_Content[rowIndex, columnIndex]))
+                _Content[rowIndex, columnIndex] = content;
             else
-                Content[rowIndex, columnIndex] += " " + content;
+                _Content[rowIndex, columnIndex] += " " + content;
         }
 
         /// <summary>
@@ -131,17 +188,17 @@ namespace BuildTablesFromPdf.Engine.Tables
                 case "s":
                 case "":
                 case null:
-                    if (Content == null)
+                    if (_Content == null)
                         return "";
                     string content = "";
-                    for (int i = 0; i < Content.GetLength(0); i++)
+                    for (int i = 0; i < _Content.GetLength(0); i++)
                     {
-                        for (int j = 0; j < Content.GetLength(1); j++)
+                        for (int j = 0; j < _Content.GetLength(1); j++)
                         {
                             if (j == 0)
-                                content += Content[i, j];
+                                content += _Content[i, j];
                             else
-                                content += " | " + Content[i, j];
+                                content += " | " + _Content[i, j];
                         }
                         content += "\r\n";
                     }
