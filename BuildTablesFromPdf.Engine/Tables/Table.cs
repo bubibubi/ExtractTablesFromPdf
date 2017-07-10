@@ -21,13 +21,13 @@ namespace BuildTablesFromPdf.Engine.Tables
         public List<Column> Columns { get; private set; }
 
         public float Width { get { return BottomRightPoint.X - TopLeftPoint.X; } }
-        public float Heigth { get { return BottomRightPoint.Y - TopLeftPoint.Y; }}
+        public float Heigth { get { return BottomRightPoint.Y - TopLeftPoint.Y; } }
 
         private string[,] _Content;
 
-        public string this[int row, int column] 
-        { 
-            get { return _Content[row, column]; } 
+        public string this[int row, int column]
+        {
+            get { return _Content[row, column]; }
             set { _Content[row, column] = value; }
         }
 
@@ -76,7 +76,7 @@ namespace BuildTablesFromPdf.Engine.Tables
                 if (String.Equals(_Content[0, i].Trim(), columnName, StringComparison.CurrentCultureIgnoreCase))
                     return i;
             }
-            
+
             throw new ArgumentException(string.Format("Column '{0}' not found", columnName), "columnName");
 
         }
@@ -129,6 +129,8 @@ namespace BuildTablesFromPdf.Engine.Tables
 
             if (string.IsNullOrEmpty(_Content[rowIndex, columnIndex]))
                 _Content[rowIndex, columnIndex] = content;
+            else if (_Content[rowIndex, columnIndex].EndsWith(" "))
+                _Content[rowIndex, columnIndex] += content;
             else
                 _Content[rowIndex, columnIndex] += " " + content;
         }
@@ -145,7 +147,7 @@ namespace BuildTablesFromPdf.Engine.Tables
             if (x < TopLeftPoint.X)
                 return 0;
 
-            if ( BottomRightPoint.X < x)
+            if (BottomRightPoint.X < x)
                 return Columns.Count + 1;
 
             Column column = Columns.SingleOrDefault(_ => _.BeginX <= x && x <= _.EndX);
@@ -170,11 +172,11 @@ namespace BuildTablesFromPdf.Engine.Tables
             return row;
         }
 
-        float IPageContent.Y { get { return TopLeftPoint.Y; }}
+        float IPageContent.Y { get { return TopLeftPoint.Y; } }
 
         #region IFormattable
 
-        private string DebuggerDisplay { get { return ToString("d"); }}
+        private string DebuggerDisplay { get { return ToString("d"); } }
 
         public override string ToString()
         {
