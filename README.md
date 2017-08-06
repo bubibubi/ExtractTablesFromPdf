@@ -1,3 +1,8 @@
+# State of the library
+The library works with few pdfs for two main reasons:
+1. The transformation matrix and the graphic state is not handled
+2. The fonts/encodings are not correctly handled
+
 # ExtractTablesFromPdf
 Extract tables (and paragraphs outside tables) from pdf
 
