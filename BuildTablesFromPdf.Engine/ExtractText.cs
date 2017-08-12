@@ -22,6 +22,7 @@ namespace BuildTablesFromPdf.Engine
 
             for (int i = 0; i < pdfReader.NumberOfPages; i++)
             {
+
                 if (ShowParserInfo)
                     Console.WriteLine("Page {0} ========================================================", i + 1);
 
@@ -39,7 +40,7 @@ namespace BuildTablesFromPdf.Engine
                 {
                     if (statement == "BT")
                     {
-                        currentMultilineStatement = new TextObjectStatement();
+                        currentMultilineStatement = new TextObjectStatement(pdfReader, i);
                         page.Statements.Add(currentMultilineStatement);
                     }
                     else if (statement == "ET")

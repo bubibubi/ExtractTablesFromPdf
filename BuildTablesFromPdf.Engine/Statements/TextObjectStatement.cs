@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using BuildTablesFromPdf.Engine.CMap;
+using iTextSharp.text.pdf;
 
 namespace BuildTablesFromPdf.Engine.Statements
 {
     // From BT to ET
     public class TextObjectStatement:MultiLineStatement
     {
+
+        public TextObjectStatement(PdfReader pdfReader, int pageNumber)
+            : base(pdfReader, pageNumber)
+        {
+        }
+
         public List<TextObjectStatementLine> Lines { get; private set; }
 
         public override void CloseMultiLineStatement()
@@ -33,6 +42,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     float fontSize;
                     if (float.TryParse(fontParameters[fontParameters.Length - 2], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out fontSize))
                         actualLineSettings.FontHeight = fontSize;
+                    actualLineSettings.CMapToUnicode = PdfFontHelper.GetFontCMapToUnicode(PdfReader, PageNumber, fontParameters[fontParameters.Length - 3]);
                 }
                 else if (rawContent.EndsWith("Td"))
                 {
@@ -85,7 +95,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
                     line.Position = new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight);
-                    line.Content = content;
+                    line.Content = ToUnicode(content, line.CMapToUnicode);
                     Lines.Add(line);
                 }
                 else if (rawContent.Trim().EndsWith("Tj"))
@@ -98,13 +108,20 @@ namespace BuildTablesFromPdf.Engine.Statements
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
                     line.Position = new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight);
-                    line.Content = content;
+                    line.Content = ToUnicode(content, line.CMapToUnicode);
                     Lines.Add(line);
                 }
 
 
             }
 
+        }
+
+        private string ToUnicode(string content, CMapToUnicode cMapToUnicode)
+        {
+            if (cMapToUnicode == null)
+                return content;
+            return cMapToUnicode.ConvertToString(content);
         }
     }
 }

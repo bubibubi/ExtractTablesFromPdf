@@ -1,0 +1,79 @@
+﻿using System;
+using BuildTablesFromPdf.Engine.Statements;
+
+namespace BuildTablesFromPdf.Engine.CMap
+{
+    public class CMapToUnicode
+    {
+        public CMapToUnicode()
+        {
+            BFRanges = new BFRangeCollection();
+        }
+
+        public BFRangeCollection BFRanges { get; private set; }
+
+        public int ConvertToUnicode(int cid)
+        {
+            var bfRange = BFRanges.Find(cid);
+            if (bfRange == null)
+                return cid;
+
+            return cid - bfRange.BeginChar + bfRange.UnicodeChar.Value;
+        }
+
+        public char ConvertToUnicodeChar(int cid)
+        {
+            return (char) ConvertToUnicode(cid);
+        }
+
+        public char ConvertToUnicodeChar(char cid)
+        {
+            return (char)ConvertToUnicode(cid);
+        }
+
+
+        public string ConvertToString(string content)
+        {
+            string convert = string.Empty;
+            foreach (char c in content)
+                convert += ConvertToUnicodeChar(c);
+
+            foreach (char c in content)
+                Console.WriteLine("{0}({2:X}) {1}", (int)c, ConvertToUnicodeChar(c), (int)c);
+
+
+            return convert;
+        }
+
+
+        /// <summary>
+        /// Parses the specified string.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>The CMapToUnicode or null if the characters map directly to unicode</returns>
+        public static CMapToUnicode Parse(string s)
+        {
+            CMapToUnicode parse = new CMapToUnicode();
+
+            string bfRange;
+            int beginBfRangePosition = s.IndexOf("beginbfrange", StringComparison.CurrentCultureIgnoreCase);
+            if (beginBfRangePosition == -1)
+                return null;
+            beginBfRangePosition += 12;
+
+            int endBfRangePosition = s.IndexOf("endbfrange", beginBfRangePosition, StringComparison.CurrentCultureIgnoreCase);
+            bfRange = s.Substring(beginBfRangePosition, endBfRangePosition - beginBfRangePosition);
+
+            int i = 0;
+            Statement.SkipSpace(bfRange, ref i);
+            while (i < bfRange.Length)
+            {
+                parse.BFRanges.Add(BFRange.Parse(bfRange, ref i));
+                Statement.SkipSpace(bfRange, ref i);
+            }
+
+            return parse;
+        }
+
+    }
+}

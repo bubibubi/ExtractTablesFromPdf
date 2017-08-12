@@ -11,15 +11,7 @@ namespace BuildTablesFromPdf.Engine
             if (!escapedContent.StartsWith("(") || !escapedContent.EndsWith(")"))
                 throw new ArgumentException(String.Format("Error retrieving content from escaped content '{0}'", escapedContent), "escapedContent");
 
-            string content = String.Empty;
-            for (int i = 1; i < escapedContent.Length - 1; i++)
-            {
-                char c = escapedContent[i];
-                if (c == '\\')
-                    i++;
-                content += escapedContent[i];
-            }
-            return content;
+            return System.Text.RegularExpressions.Regex.Unescape(escapedContent.Substring(1, escapedContent.Length - 2));
         }
 
         public static bool IsStartChar(string content, int i)

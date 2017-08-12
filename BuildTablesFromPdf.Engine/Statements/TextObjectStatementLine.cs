@@ -1,4 +1,5 @@
 using System;
+using BuildTablesFromPdf.Engine.CMap;
 
 namespace BuildTablesFromPdf.Engine.Statements
 {
@@ -7,18 +8,19 @@ namespace BuildTablesFromPdf.Engine.Statements
         public float FontHeight { get; set; }
         public Point Position { get; set; }
         public string Content { get; set; }
+        public CMapToUnicode CMapToUnicode { get; set; }
 
 
-    
         #region ICloneable Members
 
         public TextObjectStatementLine Clone()
         {
             return new TextObjectStatementLine()
             {
-                Content = Content,
+                CMapToUnicode = CMapToUnicode,
                 FontHeight = FontHeight,
-                Position = Position
+                Position = Position,
+                Content = Content
             };    
         }
 

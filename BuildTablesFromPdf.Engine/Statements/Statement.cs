@@ -96,5 +96,23 @@ namespace BuildTablesFromPdf.Engine.Statements
                     return false;
             }
         }
+
+        public static bool IsSpace(char c)
+        {
+            switch (c)
+            {
+                case ' ':
+                case '\n':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static void SkipSpace(string s, ref int i)
+        {
+            while (i < s.Length && IsSpace(s[i]))
+                i++;
+        }
     }
 }

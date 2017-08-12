@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CMap\BFRange.cs" />
+    <Compile Include="CMap\BFRangeCollection.cs" />
+    <Compile Include="CMap\CMapToUnicode.cs" />
     <Compile Include="IPageContent.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Paragraph.cs" />
@@ -52,6 +55,7 @@
     <Compile Include="PdfDataTypes\PdfObjectDataType.cs" />
     <Compile Include="PdfDataTypes\PdfNumericDataType.cs" />
     <Compile Include="PdfDataTypes\PdfStringDataType.cs" />
+    <Compile Include="PdfFontHelper.cs" />
     <Compile Include="Statements\TextObjectStatementLine.cs" />
     <Compile Include="Tables\Column.cs" />
     <Compile Include="ExtractText.cs" />

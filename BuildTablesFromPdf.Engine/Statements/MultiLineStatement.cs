@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using iTextSharp.text.pdf;
 
 namespace BuildTablesFromPdf.Engine.Statements
 {
     public abstract class MultiLineStatement : Statement
     {
-        public MultiLineStatement()
+        public PdfReader PdfReader { get; private set; }
+        public int PageNumber { get; private set; }
+
+        public MultiLineStatement(PdfReader pdfReader, int pageNumber)
         {
+            PdfReader = pdfReader;
+            PageNumber = pageNumber;
             RawContent = new List<string>();
         }
 
