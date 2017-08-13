@@ -15,6 +15,7 @@ namespace BuildTablesFromPdf.Engine
         {
             Statements = new List<Statement>();
             Tables = new List<Table>();
+            AllLines = new List<Line>();
         }
 
         public int Index { get; set; }
@@ -27,7 +28,7 @@ namespace BuildTablesFromPdf.Engine
         /// </value>
         public List<Statement> Statements { get; private set; }
 
-        public List<Line> AllLines { get; set; }
+        public List<Line> AllLines { get; private set; }
 
         public List<Line> JoinedHorizontalLines { get; set; }
 
@@ -35,6 +36,7 @@ namespace BuildTablesFromPdf.Engine
 
         public List<Line> JoinedLines { get; set; }
 
+        public int Rotation { get; set; }
 
         /// <summary>
         /// Gets or sets the table structures.
@@ -48,15 +50,22 @@ namespace BuildTablesFromPdf.Engine
 
         public List<IPageContent> Contents { get; set; }
         
-        public bool IsRefreshed { get { return AllLines != null; } }
+        public bool IsRefreshed { get { return JoinedLines != null; } }
+
+
+        public void DeleteWrongLines()
+        {
+            // ReSharper disable ImpureMethodCallOnReadonlyValueField
+            AllLines = AllLines.Where(_ => _.StartPoint.IsValid() && _.EndPoint.IsValid()).ToList();
+            // ReSharper restore ImpureMethodCallOnReadonlyValueField
+        }
+
 
         /// <summary>
         /// Determines the table structures.
         /// </summary>
         public void DetermineTableStructures()
         {
-            AllLines = GetLines();
-
             JoinedLines = JoinLines(AllLines);
 
             // Find table borders
@@ -160,7 +169,7 @@ namespace BuildTablesFromPdf.Engine
                 }
 
                 index = 0;
-                foreach (var row in tableStructure.Rows.OrderBy(_ => _.BeginY))
+                foreach (var row in tableStructure.Rows.OrderByDescending(_ => _.BeginY))
                 {
                     row.Index = index;
                     index++;
@@ -242,41 +251,6 @@ namespace BuildTablesFromPdf.Engine
         }
 
 
-        private List<Line> GetLines()
-        {
-            List<Line> lines = new List<Line>();
-
-            Point currentPoint = new Point(0, 0);
-
-            foreach (Statement statement in Statements)
-            {
-                if (statement is SetPointStatement)
-                {
-                    currentPoint = ((SetPointStatement) statement).Point;
-                }
-                else if (statement is LineToStatement)
-                {
-                    if (currentPoint == ((LineToStatement)statement).Point)
-                        continue;
-                    lines.Add(new Line(currentPoint, ((LineToStatement) statement).Point));
-                    currentPoint = ((LineToStatement) statement).Point;
-                }
-                else if (statement is RectangleStatement)
-                {
-                    lines.AddRange(((RectangleStatement) statement).GetLines());
-                }
-                else if (statement is BezierCurveStatement)
-                {
-                    currentPoint = ((BezierCurveStatement)statement).ToPoint;
-                }
-            }
-
-            // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            return lines.Where(_ => _.StartPoint.IsValid() && _.EndPoint.IsValid()).ToList();
-            // ReSharper restore ImpureMethodCallOnReadonlyValueField
-        }
-
-
         public void DetermineParagraphs()
         {
             Paragraphs = new List<Paragraph>();
@@ -297,11 +271,11 @@ namespace BuildTablesFromPdf.Engine
         public void FillContent()
         {
             Contents = new List<IPageContent>();
-            Contents.AddRange(Paragraphs.Cast<IPageContent>().Union(Tables).OrderByDescending(_ => _.Y));
+            Contents.AddRange(Paragraphs.Cast<IPageContent>().Union(Tables).OrderBy(_ => _.Y));
 
             var textObjectStatementsLines = Statements.Where(_ => _ is TextObjectStatement).Cast<TextObjectStatement>().SelectMany(_ => _.Lines)
                 .Where(_ => !string.IsNullOrWhiteSpace(_.Content))
-                .OrderByDescending(_ => _.Position.Y).ThenBy(_ => _.Position.X);
+                .OrderBy(_ => _.Position.Y).ThenBy(_ => _.Position.X);
 
             foreach (var line in textObjectStatementsLines.Where(_ => _.Position.IsValid()))
             {
@@ -320,5 +294,6 @@ namespace BuildTablesFromPdf.Engine
             }
             return pageContent;
         }
+
     }
 }

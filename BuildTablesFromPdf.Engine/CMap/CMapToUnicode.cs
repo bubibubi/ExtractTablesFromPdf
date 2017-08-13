@@ -37,11 +37,6 @@ namespace BuildTablesFromPdf.Engine.CMap
             string convert = string.Empty;
             foreach (char c in content)
                 convert += ConvertToUnicodeChar(c);
-
-            foreach (char c in content)
-                Console.WriteLine("{0}({2:X}) {1}", (int)c, ConvertToUnicodeChar(c), (int)c);
-
-
             return convert;
         }
 

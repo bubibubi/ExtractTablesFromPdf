@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using BuildTablesFromPdf.Engine.Statements;
 using iTextSharp.text.pdf;
@@ -10,6 +11,7 @@ namespace BuildTablesFromPdf.Engine
     {
 
         public static bool ShowParserInfo = false;
+        public static bool IgnoreWhiteLines = true;
 
         public static PageCollection Read(string filePath)
         {
@@ -30,7 +32,14 @@ namespace BuildTablesFromPdf.Engine
                 page.Index = pages.Count;
                 MultiLineStatement currentMultilineStatement = null;
 
-                Matrix transformMatrix = Matrix.Identity;
+                GraphicState graphicState = new GraphicState();
+                graphicState.TransformMatrix = Matrix.Identity;
+                graphicState.Color = Color.White;
+                Stack<GraphicState> graphicStateStack = new Stack<GraphicState>();
+
+                Point currentPoint = new Point(0, 0);
+
+                page.Rotation = pdfReader.GetPageRotation(i + 1);
 
                 string rawPdfContent = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, pdfReader.GetPageContent(i + 1)));
                 int pointer = 0;
@@ -40,7 +49,7 @@ namespace BuildTablesFromPdf.Engine
                 {
                     if (statement == "BT")
                     {
-                        currentMultilineStatement = new TextObjectStatement(pdfReader, i);
+                        currentMultilineStatement = new TextObjectStatement(pdfReader, i, graphicState.TransformMatrix);
                         page.Statements.Add(currentMultilineStatement);
                     }
                     else if (statement == "ET")
@@ -59,19 +68,18 @@ namespace BuildTablesFromPdf.Engine
                     }
                     else if (statement == "q")
                     {
-                        page.Statements.Add(PushGraphicStateStatement.Value);
+                        graphicStateStack.Push(graphicState.Clone());
                     }
                     else if (statement == "Q")
                     {
-                        page.Statements.Add(PopGraphicStateStatement.Value);
+                        graphicState = graphicStateStack.Pop();
                     }
                     else if (statement.EndsWith(" cm"))
                     {
-                        page.Statements.Add(new ModifyMatrixStatement(statement));
                         Matrix newTransformMatrix;
                         if (!Matrix.TryParse(statement, out newTransformMatrix))
                             newTransformMatrix = Matrix.Identity;
-                        transformMatrix *= newTransformMatrix;
+                        graphicState.TransformMatrix *= newTransformMatrix;
                     }
                     else if (statement.EndsWith(" J"))
                     {
@@ -83,27 +91,38 @@ namespace BuildTablesFromPdf.Engine
                     }
                     else if (statement.EndsWith(" rg"))
                     {
-                        page.Statements.Add(new NonStrokingColorStatement(statement));
+                        graphicState.Color = new NonStrokingColorStatement(statement).Color;
                     }
                     else if (statement.EndsWith(" RG"))
                     {
-                        page.Statements.Add(new StrokingColorStatement(statement));
+                        graphicState.Color = new StrokingColorStatement(statement).Color;
                     }
                     else if (statement.EndsWith(" G"))
                     {
-                        page.Statements.Add(new GreyColorStatement(statement));
+                        graphicState.Color = new GreyColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" g"))
+                    {
+                        graphicState.Color = new GreyColorStatement(statement).Color;
                     }
                     else if (statement.EndsWith(" m"))
                     {
-                        page.Statements.Add(new SetPointStatement(statement));
+                        currentPoint = graphicState.TransformMatrix.TransformPoint(new SetPointStatement(statement).Point).Rotate(page.Rotation);
                     }
                     else if (statement.EndsWith(" l"))
                     {
-                        page.Statements.Add(new LineToStatement(statement));
+                        var lineToStatement = new LineToStatement(statement);
+                        var destinationPoint = graphicState.TransformMatrix.TransformPoint(lineToStatement.Point).Rotate(page.Rotation);
+                        if (currentPoint != destinationPoint)
+                        {
+                            page.AllLines.Add(new Line(currentPoint, destinationPoint));
+                            currentPoint = destinationPoint;
+                        }
                     }
                     else if (statement.EndsWith(" c"))
                     {
-                        page.Statements.Add(new BezierCurveStatement(statement));
+                        var bezierCurveStatement = new BezierCurveStatement(statement);
+                        currentPoint = graphicState.TransformMatrix.TransformPoint(bezierCurveStatement.ToPoint).Rotate(page.Rotation);
                     }
                     else if (statement.EndsWith(" d"))
                     {
@@ -115,7 +134,16 @@ namespace BuildTablesFromPdf.Engine
                     }
                     else if (statement.EndsWith(" re"))
                     {
-                        page.Statements.Add(new RectangleStatement(statement));
+                        var lines =
+                            new RectangleStatement(statement)
+                            .GetLines()
+                            .Where(_ => graphicState.TransformMatrix.TransformPoint(_.StartPoint) != graphicState.TransformMatrix.TransformPoint(_.EndPoint))
+                            .Select(_ => graphicState.TransformMatrix.TransformLine(_).Rotate(page.Rotation))
+                            ;
+                        if (!IgnoreWhiteLines || !graphicState.Color.IsWhite())
+                            page.AllLines.AddRange(lines);
+                        else
+                            Console.WriteLine("Ignored rectangle");
                     }
                     else if (statement == "S")
                     {
@@ -137,6 +165,8 @@ namespace BuildTablesFromPdf.Engine
 
                     statement = Statement.GetNextStatement(rawPdfContent, ref pointer);
                 }
+
+                page.DeleteWrongLines();
 
                 pages.Add(page);
             }

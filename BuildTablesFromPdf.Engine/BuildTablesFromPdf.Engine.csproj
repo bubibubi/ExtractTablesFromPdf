@@ -46,6 +46,8 @@
     <Compile Include="CMap\BFRange.cs" />
     <Compile Include="CMap\BFRangeCollection.cs" />
     <Compile Include="CMap\CMapToUnicode.cs" />
+    <Compile Include="Color.cs" />
+    <Compile Include="GraphicState.cs" />
     <Compile Include="IPageContent.cs" />
     <Compile Include="PageCollection.cs" />
     <Compile Include="Paragraph.cs" />
@@ -72,12 +74,9 @@
     <Compile Include="Statements\LineCapStyleStatement.cs" />
     <Compile Include="Statements\LineJoinStyleStatement.cs" />
     <Compile Include="Statements\LineToStatement.cs" />
-    <Compile Include="Statements\ModifyMatrixStatement.cs" />
     <Compile Include="Statements\MultiLineStatement.cs" />
     <Compile Include="Statements\NonStrokingColorStatement.cs" />
     <Compile Include="Statements\PointStatement.cs" />
-    <Compile Include="Statements\PopGraphicStateStatement.cs" />
-    <Compile Include="Statements\PushGraphicStateStatement.cs" />
     <Compile Include="Statements\RectangleStatement.cs" />
     <Compile Include="Statements\SetLineDashPatternStatement.cs" />
     <Compile Include="Statements\SetLineWidthStatement.cs" />

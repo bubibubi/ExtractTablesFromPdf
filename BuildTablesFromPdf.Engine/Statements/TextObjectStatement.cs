@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using BuildTablesFromPdf.Engine.CMap;
 using iTextSharp.text.pdf;
 
@@ -12,8 +11,8 @@ namespace BuildTablesFromPdf.Engine.Statements
     public class TextObjectStatement:MultiLineStatement
     {
 
-        public TextObjectStatement(PdfReader pdfReader, int pageNumber)
-            : base(pdfReader, pageNumber)
+        public TextObjectStatement(PdfReader pdfReader, int pageNumber, Matrix baseTransformMatrix)
+            : base(pdfReader, pageNumber, baseTransformMatrix)
         {
         }
 
@@ -27,6 +26,8 @@ namespace BuildTablesFromPdf.Engine.Statements
             Matrix transformMatrix = Matrix.Identity;
             Point position = new Point();
             float leadingParameter = 0;
+
+            int pageRotation = PdfReader.GetPageRotation(PageNumber + 1);
 
             foreach (string rawContent in RawContent)
             {
@@ -94,7 +95,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     }
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
-                    line.Position = new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight);
+                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
                     line.Content = ToUnicode(content, line.CMapToUnicode);
                     Lines.Add(line);
                 }
@@ -107,7 +108,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
-                    line.Position = new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight);
+                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
                     line.Content = ToUnicode(content, line.CMapToUnicode);
                     Lines.Add(line);
                 }

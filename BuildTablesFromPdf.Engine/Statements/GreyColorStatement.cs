@@ -1,6 +1,6 @@
 ﻿namespace BuildTablesFromPdf.Engine.Statements
 {
-    internal class GreyColorStatement : SingleLineStatement
+    internal class GreyColorStatement : ColorStatement
     {
         public GreyColorStatement(string rawContent)
         {

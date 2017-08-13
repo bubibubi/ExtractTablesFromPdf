@@ -5,7 +5,7 @@ namespace BuildTablesFromPdf.Engine.Statements
 {
     public class TextObjectStatementLine : ICloneable
     {
-        public float FontHeight { get; set; }
+        public double FontHeight { get; set; }
         public Point Position { get; set; }
         public string Content { get; set; }
         public CMapToUnicode CMapToUnicode { get; set; }

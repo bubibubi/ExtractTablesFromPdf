@@ -107,10 +107,10 @@ namespace BuildTablesFromPdf.Engine
 
         #endregion
 
-        public readonly float X;
-        public readonly float Y;
+        public readonly double X;
+        public readonly double Y;
 
-        public Point(float x, float y)
+        public Point(double x, double y)
         {
             X = x;
             Y = y;
@@ -142,6 +142,19 @@ namespace BuildTablesFromPdf.Engine
                 return false;
 
             return true;
+        }
+
+        public Point Rotate(int pageRotation)
+        {
+            switch (pageRotation)
+            {
+                case 0:
+                    return this;
+                case 90:
+                    return new Point(Y, X);
+                default:
+                    return this;
+            }
         }
     }
 }

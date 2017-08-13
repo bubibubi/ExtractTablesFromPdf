@@ -74,6 +74,13 @@ namespace BuildTablesFromPdf.Engine
         /// </summary>
         public readonly Point EndPoint;
 
+
+        public Line Rotate(int pageRotation)
+        {
+            return new Line(StartPoint.Rotate(pageRotation), EndPoint.Rotate(pageRotation));
+        }
+
+
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>

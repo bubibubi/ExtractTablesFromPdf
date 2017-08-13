@@ -8,11 +8,13 @@ namespace BuildTablesFromPdf.Engine.Statements
     {
         public PdfReader PdfReader { get; private set; }
         public int PageNumber { get; private set; }
+        public Matrix BaseTransformMatrix { get; private set; }
 
-        public MultiLineStatement(PdfReader pdfReader, int pageNumber)
+        public MultiLineStatement(PdfReader pdfReader, int pageNumber, Matrix baseTransformMatrix)
         {
             PdfReader = pdfReader;
             PageNumber = pageNumber;
+            BaseTransformMatrix = baseTransformMatrix;
             RawContent = new List<string>();
         }
 

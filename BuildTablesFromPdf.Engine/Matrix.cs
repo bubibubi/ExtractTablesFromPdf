@@ -11,7 +11,7 @@ namespace BuildTablesFromPdf.Engine
         private Matrix()
         {}
 
-        public Matrix(float a, float b, float c, float d, float e, float f)
+        public Matrix(double a, double b, double c, double d, double e, double f)
         {
             _a = a;
             _b = b;
@@ -21,40 +21,40 @@ namespace BuildTablesFromPdf.Engine
             _f = f;
         }
 
-        private float _a = 1;
-        private float _b = 0;
-        private float _c = 0;
-        private float _d = 1;
-        private float _e = 0;
-        private float _f = 0;
+        private double _a = 1;
+        private double _b = 0;
+        private double _c = 0;
+        private double _d = 1;
+        private double _e = 0;
+        private double _f = 0;
 
         // ReSharper disable InconsistentNaming
-        public float a
+        public double a
         {
             get { return _a; }
         }
 
-        public float b
+        public double b
         {
             get { return _b; }
         }
 
-        public float c
+        public double c
         {
             get { return _c; }
         }
 
-        public float d
+        public double d
         {
             get { return _d; }
         }
 
-        public float e
+        public double e
         {
             get { return _e; }
         }
 
-        public float f
+        public double f
         {
             get { return _f; }
         }
@@ -81,12 +81,12 @@ namespace BuildTablesFromPdf.Engine
 
             var transformMatrix = new Matrix()
             {
-                _a = float.Parse(parts[0], NumberFormatInfo.InvariantInfo),
-                _b = float.Parse(parts[1], NumberFormatInfo.InvariantInfo),
-                _c = float.Parse(parts[2], NumberFormatInfo.InvariantInfo),
-                _d = float.Parse(parts[3], NumberFormatInfo.InvariantInfo),
-                _e = float.Parse(parts[4], NumberFormatInfo.InvariantInfo),
-                _f = float.Parse(parts[5], NumberFormatInfo.InvariantInfo)
+                _a = double.Parse(parts[0], NumberFormatInfo.InvariantInfo),
+                _b = double.Parse(parts[1], NumberFormatInfo.InvariantInfo),
+                _c = double.Parse(parts[2], NumberFormatInfo.InvariantInfo),
+                _d = double.Parse(parts[3], NumberFormatInfo.InvariantInfo),
+                _e = double.Parse(parts[4], NumberFormatInfo.InvariantInfo),
+                _f = double.Parse(parts[5], NumberFormatInfo.InvariantInfo)
             };
 
             return transformMatrix;
@@ -130,24 +130,33 @@ namespace BuildTablesFromPdf.Engine
             if (r == null)
                 return l;
 
-            float x = r.TransformX(l.X, l.Y);
-            float y = r.TransformY(l.X, l.Y);
+            double x = r.TransformX(l.X, l.Y);
+            double y = r.TransformY(l.X, l.Y);
 
             return new Point(x, y);
         }
 
-        public float TransformX(float x, float y)
+        public double TransformX(double x, double y)
         {
             return a * x + c * y + e;
 
         }
 
-        public float TransformY(float x, float y)
+        public double TransformY(double x, double y)
         {
             return b * x + d * y + f;
 
         }
 
+        public Point TransformPoint(Point point)
+        {
+            return new Point(TransformX(point.X, point.Y), TransformY(point.X, point.Y));
+        }
+
+        public Line TransformLine(Line line)
+        {
+            return new Line(TransformPoint(line.StartPoint), TransformPoint(line.EndPoint));
+        }
 
         #region ==
 
@@ -194,6 +203,5 @@ namespace BuildTablesFromPdf.Engine
         {
             return string.Format("|{0}|{1}|0 - {2}|{3}|0 - {4}|{5}|1", a, b, c, d, e, f);
         }
-
     }
 }

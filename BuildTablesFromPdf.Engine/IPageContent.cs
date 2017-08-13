@@ -6,7 +6,7 @@ namespace BuildTablesFromPdf.Engine
     {
         void AddText(Point point, string content);
         bool Contains(Point point);
-        bool Contains(float y);
-        float Y { get; }
+        bool Contains(double y);
+        double Y { get; }
     }
 }

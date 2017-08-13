@@ -2,8 +2,8 @@
 {
     public class Column
     {
-        public float BeginX { get; set; }
-        public float EndX { get; set; }
+        public double BeginX { get; set; }
+        public double EndX { get; set; }
         public int Index { get; set; }
 
         public override string ToString()

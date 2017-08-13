@@ -20,8 +20,8 @@ namespace BuildTablesFromPdf.Engine.Tables
         public List<Row> Rows { get; private set; }
         public List<Column> Columns { get; private set; }
 
-        public float Width { get { return BottomRightPoint.X - TopLeftPoint.X; } }
-        public float Heigth { get { return BottomRightPoint.Y - TopLeftPoint.Y; } }
+        public double Width { get { return BottomRightPoint.X - TopLeftPoint.X; } }
+        public double Heigth { get { return BottomRightPoint.Y - TopLeftPoint.Y; } }
 
         private string[,] _Content;
 
@@ -92,7 +92,7 @@ namespace BuildTablesFromPdf.Engine.Tables
                 line.EndPoint.X <= BottomRightPoint.X + Line.Tolerance;
         }
 
-        public bool Contains(float y)
+        public bool Contains(double y)
         {
             return
                 TopLeftPoint.Y - Line.Tolerance <= y &&
@@ -142,7 +142,7 @@ namespace BuildTablesFromPdf.Engine.Tables
         /// </summary>
         /// <param name="x">The x coordinate.</param>
         /// <returns>The column</returns>
-        private int FindColumnIndex(float x)
+        private int FindColumnIndex(double x)
         {
             if (x < TopLeftPoint.X)
                 return 0;
@@ -164,7 +164,7 @@ namespace BuildTablesFromPdf.Engine.Tables
         /// </summary>
         /// <param name="y">The y.</param>
         /// <returns>The row or null if y is outside the table</returns>
-        private Row FindRow(float y)
+        private Row FindRow(double y)
         {
             Row row = Rows.FirstOrDefault(_ => _.BeginY <= y && y <= _.EndY);
             if (row == null)
@@ -172,7 +172,7 @@ namespace BuildTablesFromPdf.Engine.Tables
             return row;
         }
 
-        float IPageContent.Y { get { return TopLeftPoint.Y; } }
+        double IPageContent.Y { get { return TopLeftPoint.Y; } }
 
         #region IFormattable
 

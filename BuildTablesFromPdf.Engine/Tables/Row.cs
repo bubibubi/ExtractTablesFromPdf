@@ -2,8 +2,8 @@
 {
     public class Row
     {
-        public float BeginY { get; set; }
-        public float EndY { get; set; }
+        public double BeginY { get; set; }
+        public double EndY { get; set; }
         public int Index { get; set; }
 
         public override string ToString()

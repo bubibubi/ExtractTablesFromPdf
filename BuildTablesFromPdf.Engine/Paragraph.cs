@@ -6,12 +6,12 @@ namespace BuildTablesFromPdf.Engine
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class Paragraph : IPageContent, IFormattable
     {
-        public Paragraph(float y)
+        public Paragraph(double y)
         {
             Y = y;
         }
 
-        public float Y { get; private set; }
+        public double Y { get; private set; }
 
         public string Content { get; set; }
 
@@ -31,7 +31,7 @@ namespace BuildTablesFromPdf.Engine
             return Y - Line.Tolerance < point.Y && point.Y < Y + Line.Tolerance * 3;
         }
 
-        public bool Contains(float y)
+        public bool Contains(double y)
         {
             return Y - Line.Tolerance < y && y < Y + Line.Tolerance * 3;
         }
