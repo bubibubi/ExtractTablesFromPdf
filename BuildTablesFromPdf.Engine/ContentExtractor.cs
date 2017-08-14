@@ -7,7 +7,7 @@ using iTextSharp.text.pdf;
 
 namespace BuildTablesFromPdf.Engine
 {
-    public class ExtractText
+    public class ContentExtractor
     {
 
         public static bool ShowParserInfo = false;
@@ -49,7 +49,7 @@ namespace BuildTablesFromPdf.Engine
                 {
                     if (statement == "BT")
                     {
-                        currentMultilineStatement = new TextObjectStatement(pdfReader, i, graphicState.TransformMatrix);
+                        currentMultilineStatement = new TextObjectStatement(pdfReader, i + 1, graphicState.TransformMatrix);
                         page.Statements.Add(currentMultilineStatement);
                     }
                     else if (statement == "ET")

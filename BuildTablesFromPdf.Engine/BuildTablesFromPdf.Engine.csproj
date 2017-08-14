@@ -58,9 +58,10 @@
     <Compile Include="PdfDataTypes\PdfNumericDataType.cs" />
     <Compile Include="PdfDataTypes\PdfStringDataType.cs" />
     <Compile Include="PdfFontHelper.cs" />
+    <Compile Include="SimpleTextExtractor.cs" />
     <Compile Include="Statements\TextObjectStatementLine.cs" />
     <Compile Include="Tables\Column.cs" />
-    <Compile Include="ExtractText.cs" />
+    <Compile Include="ContentExtractor.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="Point.cs" />

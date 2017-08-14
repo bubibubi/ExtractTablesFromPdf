@@ -27,7 +27,7 @@ namespace BuildTablesFromPdf.Engine.Statements
             Point position = new Point();
             float leadingParameter = 0;
 
-            int pageRotation = PdfReader.GetPageRotation(PageNumber + 1);
+            int pageRotation = PdfReader.GetPageRotation(PageNumber);
 
             foreach (string rawContent in RawContent)
             {

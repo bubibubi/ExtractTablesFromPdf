@@ -75,8 +75,8 @@ namespace BuildTablesFromPdf.Engine
 
         public static CMapToUnicode GetFontCMapToUnicode(PdfReader pdfReader, int pageNumber, string fontKey)
         {
-            PdfDictionary resources = pdfReader.GetPageN(pageNumber + 1).GetAsDict(PdfName.RESOURCES);
-
+            PdfDictionary resources = pdfReader.GetPageN(pageNumber).GetAsDict(PdfName.RESOURCES);
+            if (pageNumber == 65) Console.WriteLine();
             var fontDict = FindFontDictionary(resources, fontKey);
             if (fontDict == null)
                 return null;
@@ -94,11 +94,14 @@ namespace BuildTablesFromPdf.Engine
             if (resources == null)
                 return null;
             PdfDictionary xObjects = resources.GetAsDict(PdfName.XOBJECT);
+            PdfDictionary fontDictionary;
             if (xObjects != null)
             {
                 foreach (PdfName key in xObjects.Keys)
                 {
-                    return FindFontDictionary(xObjects.GetAsDict(key), fontKey);
+                    fontDictionary = FindFontDictionary(xObjects.GetAsDict(key), fontKey);
+                    if (fontDictionary != null)
+                        return fontDictionary;
                 }
             }
 
@@ -111,7 +114,7 @@ namespace BuildTablesFromPdf.Engine
             if (pdfName == null)
                 return null;
 
-            PdfDictionary fontDictionary = (PdfDictionary)PdfReader.GetPdfObject(fonts.Get(pdfName));
+            fontDictionary = (PdfDictionary)PdfReader.GetPdfObject(fonts.Get(pdfName));
 
             return fontDictionary;
 

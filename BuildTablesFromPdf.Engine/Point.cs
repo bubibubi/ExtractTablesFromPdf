@@ -5,6 +5,8 @@ namespace BuildTablesFromPdf.Engine
 {
     public struct Point
     {
+        public static readonly Point Origin = new Point(0, 0);
+
         #region ==
 
         public bool Equals(Point other)

@@ -17,7 +17,7 @@ namespace BuildTablesFromPdf
 
             //ExtractByLocation.Read(@"C:\Users\Utente\Desktop\CR2993\GLOBAL_SISTEMI.PDF");
 
-            var pages = ExtractText.Read(@"C:\Users\Utente\Desktop\CR2993\GLOBAL_SISTEMI.PDF");
+            var pages = ContentExtractor.Read(@"C:\Users\Utente\Desktop\CR2993\GLOBAL_SISTEMI.PDF");
 
             pages[2].DetermineTableStructures();
 

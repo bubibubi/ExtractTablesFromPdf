@@ -33,7 +33,7 @@ namespace BuildTablesFromPdf.Renderer
 
         private void ShowDocument(string fileName)
         {
-            _pages = ExtractText.Read(fileName);
+            _pages = ContentExtractor.Read(fileName);
             lblPages.Text = _pages.Count.ToString();
             DrawPage(0);
         }
