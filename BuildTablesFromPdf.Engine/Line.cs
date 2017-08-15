@@ -7,12 +7,6 @@ namespace BuildTablesFromPdf.Engine
     /// </summary>
     public struct Line
     {
-
-        /// <summary>
-        /// The tolerance
-        /// </summary>
-        public const float Tolerance = 1f;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Line"/> struct.
         /// </summary>
@@ -98,7 +92,7 @@ namespace BuildTablesFromPdf.Engine
         /// <returns>True if the line is horizontal; otherwise false</returns>
         public bool IsHorizontal()
         {
-            return Math.Abs(StartPoint.Y - EndPoint.Y) < Tolerance;
+            return Math.Abs(StartPoint.Y - EndPoint.Y) < ContentExtractor.Tolerance;
         }
 
 
@@ -108,7 +102,7 @@ namespace BuildTablesFromPdf.Engine
         /// <returns>True if the line is vertical; otherwise false</returns>
         public bool IsVertical()
         {
-            return Math.Abs(StartPoint.X - EndPoint.X) < Tolerance;
+            return Math.Abs(StartPoint.X - EndPoint.X) < ContentExtractor.Tolerance;
         }
 
 
@@ -217,7 +211,7 @@ namespace BuildTablesFromPdf.Engine
         {
             if (!this.IsVertical() || !line.IsVertical())
                 return false;
-            else if (Math.Abs(this.StartPoint.X - line.StartPoint.X) < Tolerance)
+            else if (Math.Abs(this.StartPoint.X - line.StartPoint.X) < ContentExtractor.Tolerance)
                 return true;
             else
                 return false;
@@ -232,7 +226,7 @@ namespace BuildTablesFromPdf.Engine
         {
             if (!this.IsHorizontal() || !line.IsHorizontal())
                 return false;
-            else if (Math.Abs(this.StartPoint.Y - line.StartPoint.Y) < Tolerance)
+            else if (Math.Abs(this.StartPoint.Y - line.StartPoint.Y) < ContentExtractor.Tolerance)
                 return true;
             else
                 return false;

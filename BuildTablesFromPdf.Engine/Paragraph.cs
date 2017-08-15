@@ -28,12 +28,12 @@ namespace BuildTablesFromPdf.Engine
 
         public bool Contains(Point point)
         {
-            return Y - Line.Tolerance < point.Y && point.Y < Y + Line.Tolerance * 3;
+            return Y - ContentExtractor.Tolerance < point.Y && point.Y < Y + ContentExtractor.Tolerance * 3;
         }
 
         public bool Contains(double y)
         {
-            return Y - Line.Tolerance < y && y < Y + Line.Tolerance * 3;
+            return Y - ContentExtractor.Tolerance < y && y < Y + ContentExtractor.Tolerance * 3;
         }
 
         #region IFormattable

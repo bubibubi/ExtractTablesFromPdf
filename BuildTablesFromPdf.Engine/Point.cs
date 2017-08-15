@@ -11,7 +11,7 @@ namespace BuildTablesFromPdf.Engine
 
         public bool Equals(Point other)
         {
-            return Math.Abs(X - other.X) < Line.Tolerance && Math.Abs(Y - other.Y) < Line.Tolerance;
+            return Math.Abs(X - other.X) < ContentExtractor.Tolerance && Math.Abs(Y - other.Y) < ContentExtractor.Tolerance;
         }
 
         public override bool Equals(object obj)
@@ -44,9 +44,9 @@ namespace BuildTablesFromPdf.Engine
 
         public static bool operator >(Point left, Point right)
         {
-            if (Math.Abs(left.X - right.X) < Line.Tolerance)
+            if (Math.Abs(left.X - right.X) < ContentExtractor.Tolerance)
             {
-                if (Math.Abs(left.Y - right.Y) < Line.Tolerance)
+                if (Math.Abs(left.Y - right.Y) < ContentExtractor.Tolerance)
                     // Equal point
                     return false;
                 else
@@ -60,9 +60,9 @@ namespace BuildTablesFromPdf.Engine
 
         public static bool operator >=(Point left, Point right)
         {
-            if (Math.Abs(left.X - right.X) < Line.Tolerance)
+            if (Math.Abs(left.X - right.X) < ContentExtractor.Tolerance)
             {
-                if (Math.Abs(left.Y - right.Y) < Line.Tolerance)
+                if (Math.Abs(left.Y - right.Y) < ContentExtractor.Tolerance)
                     // Equal point
                     return true;
                 else
@@ -76,9 +76,9 @@ namespace BuildTablesFromPdf.Engine
 
         public static bool operator <=(Point left, Point right)
         {
-            if (Math.Abs(left.X - right.X) < Line.Tolerance)
+            if (Math.Abs(left.X - right.X) < ContentExtractor.Tolerance)
             {
-                if (Math.Abs(left.Y - right.Y) < Line.Tolerance)
+                if (Math.Abs(left.Y - right.Y) < ContentExtractor.Tolerance)
                     // Equal point
                     return true;
                 else
@@ -93,9 +93,9 @@ namespace BuildTablesFromPdf.Engine
 
         public static bool operator <(Point left, Point right)
         {
-            if (Math.Abs(left.X - right.X) < Line.Tolerance)
+            if (Math.Abs(left.X - right.X) < ContentExtractor.Tolerance)
             {
-                if (Math.Abs(left.Y - right.Y) < Line.Tolerance)
+                if (Math.Abs(left.Y - right.Y) < ContentExtractor.Tolerance)
                     // Equal point
                     return false;
                 else
@@ -151,7 +151,7 @@ namespace BuildTablesFromPdf.Engine
             switch (pageRotation)
             {
                 case 0:
-                    return this;
+                    return new Point(X, 800 - Y);
                 case 90:
                     return new Point(Y, X);
                 default:

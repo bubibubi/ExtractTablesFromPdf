@@ -112,11 +112,11 @@ namespace BuildTablesFromPdf.Engine
                     continue;
 
                 // Check if the row already belongs to the table
-                if (tableStructure.Rows.Any(_ => Math.Abs(_.BeginY - horizontalLine.StartPoint.Y) < Line.Tolerance))
+                if (tableStructure.Rows.Any(_ => Math.Abs(_.BeginY - horizontalLine.StartPoint.Y) < ContentExtractor.Tolerance))
                     continue;
 
                 // Check if the row is the bottom edge of the table
-                if (tableStructure.BottomRightPoint.Y - horizontalLine.StartPoint.Y < Line.Tolerance)
+                if (tableStructure.BottomRightPoint.Y - horizontalLine.StartPoint.Y < ContentExtractor.Tolerance)
                     continue;
 
                 tableStructure.Rows.Add(new Row() {BeginY = horizontalLine.StartPoint.Y});
@@ -131,11 +131,11 @@ namespace BuildTablesFromPdf.Engine
                     continue;
 
                 // The row already belongs to the table
-                if (tableStructure.Columns.Any(_ => Math.Abs(_.BeginX - verticalLine.StartPoint.X) < Line.Tolerance))
+                if (tableStructure.Columns.Any(_ => Math.Abs(_.BeginX - verticalLine.StartPoint.X) < ContentExtractor.Tolerance))
                     continue;
 
                 // Check if the row is the bottom edge of the table
-                if (tableStructure.BottomRightPoint.X - verticalLine.StartPoint.X < Line.Tolerance)
+                if (tableStructure.BottomRightPoint.X - verticalLine.StartPoint.X < ContentExtractor.Tolerance)
                     continue;
 
 
@@ -148,14 +148,14 @@ namespace BuildTablesFromPdf.Engine
             {
                 // Fix EndYs
                 for (int i = 0; i < tableStructure.Rows.Count - 1; i++)
-                    tableStructure.Rows[i].EndY = tableStructure.Rows[i + 1].BeginY - Line.Tolerance * 0.1f;
+                    tableStructure.Rows[i].EndY = tableStructure.Rows[i + 1].BeginY - ContentExtractor.Tolerance * 0.1f;
 
                 tableStructure.Rows[tableStructure.Rows.Count - 1].EndY = tableStructure.BottomRightPoint.Y;
 
 
                 // Fix EndXs
                 for (int i = 0; i < tableStructure.Columns.Count - 1; i++)
-                    tableStructure.Columns[i].EndX = tableStructure.Columns[i + 1].BeginX - Line.Tolerance * 0.1f;
+                    tableStructure.Columns[i].EndX = tableStructure.Columns[i + 1].BeginX - ContentExtractor.Tolerance * 0.1f;
 
                 tableStructure.Columns[tableStructure.Columns.Count - 1].EndX = tableStructure.BottomRightPoint.X;
 

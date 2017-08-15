@@ -85,28 +85,28 @@ namespace BuildTablesFromPdf.Engine.Tables
         public bool Contains(Line line)
         {
             return
-                TopLeftPoint.Y - Line.Tolerance <= line.StartPoint.Y &&
-                line.EndPoint.Y <= BottomRightPoint.Y + Line.Tolerance
+                TopLeftPoint.Y - ContentExtractor.Tolerance <= line.StartPoint.Y &&
+                line.EndPoint.Y <= BottomRightPoint.Y + ContentExtractor.Tolerance
                 &&
-                TopLeftPoint.X - Line.Tolerance <= line.StartPoint.X &&
-                line.EndPoint.X <= BottomRightPoint.X + Line.Tolerance;
+                TopLeftPoint.X - ContentExtractor.Tolerance <= line.StartPoint.X &&
+                line.EndPoint.X <= BottomRightPoint.X + ContentExtractor.Tolerance;
         }
 
         public bool Contains(double y)
         {
             return
-                TopLeftPoint.Y - Line.Tolerance <= y &&
-                y <= BottomRightPoint.Y + Line.Tolerance;
+                TopLeftPoint.Y - ContentExtractor.Tolerance <= y &&
+                y <= BottomRightPoint.Y + ContentExtractor.Tolerance;
         }
 
         public bool Contains(Point point)
         {
             return
-                TopLeftPoint.Y - Line.Tolerance <= point.Y &&
-                point.Y <= BottomRightPoint.Y - Line.Tolerance
+                TopLeftPoint.Y - ContentExtractor.Tolerance <= point.Y &&
+                point.Y <= BottomRightPoint.Y - ContentExtractor.Tolerance
                 &&
-                TopLeftPoint.X - Line.Tolerance <= point.X &&
-                point.X <= BottomRightPoint.X - Line.Tolerance;
+                TopLeftPoint.X - ContentExtractor.Tolerance <= point.X &&
+                point.X <= BottomRightPoint.X - ContentExtractor.Tolerance;
         }
 
         internal void CreateContent()
@@ -168,7 +168,7 @@ namespace BuildTablesFromPdf.Engine.Tables
         {
             Row row = Rows.FirstOrDefault(_ => _.BeginY <= y && y <= _.EndY);
             if (row == null)
-                row = Rows.FirstOrDefault(_ => _.BeginY - Line.Tolerance <= y && y <= _.EndY + Line.Tolerance);
+                row = Rows.FirstOrDefault(_ => _.BeginY - ContentExtractor.Tolerance <= y && y <= _.EndY + ContentExtractor.Tolerance);
             return row;
         }
 

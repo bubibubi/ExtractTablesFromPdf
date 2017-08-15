@@ -12,7 +12,16 @@ namespace BuildTablesFromPdf.Engine
 
         public static bool ShowParserInfo = false;
         public static bool IgnoreWhiteLines = true;
-
+ 
+        /// <summary>
+        /// The tolerance. This parameter is used to determine same line/points
+        /// Decrease this value if you need to discover more table cells/paragraphs
+        /// Increase this value if you need to discover less table cells/paragraphs
+        /// Often the right parameter is determined by the line boldness. Bold lines, 
+        /// in pdf files, are box filled
+        /// </summary>
+        public static float Tolerance = 2f;
+ 
         public static PageCollection Read(string filePath)
         {
 
@@ -26,7 +35,7 @@ namespace BuildTablesFromPdf.Engine
             {
 
                 if (ShowParserInfo)
-                    Console.WriteLine("Page {0} ========================================================", i + 1);
+                    Console.WriteLine("Page {0} === ({1}, {2}, {3}, {4}) rotated of {5} ======================================================", i + 1, pdfReader.GetPageSize(i + 1).Top, pdfReader.GetPageSize(i + 1).Left, pdfReader.GetPageSize(i + 1).Bottom, pdfReader.GetPageSize(i + 1).Right, pdfReader.GetPageRotation(i + 1));
 
                 var page = new Page();
                 page.Index = pages.Count;
@@ -143,7 +152,10 @@ namespace BuildTablesFromPdf.Engine
                         if (!IgnoreWhiteLines || !graphicState.Color.IsWhite())
                             page.AllLines.AddRange(lines);
                         else
-                            Console.WriteLine("Ignored rectangle");
+                        {
+                            if (ShowParserInfo)
+                                Console.WriteLine("Ignored rectangle");
+                        }
                     }
                     else if (statement == "S")
                     {
@@ -173,5 +185,6 @@ namespace BuildTablesFromPdf.Engine
 
             return pages;
         }
+
     }
 }
