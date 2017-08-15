@@ -33,6 +33,7 @@
             this.btnCheckAllPages = new System.Windows.Forms.Button();
             this.btnViewRawContent = new System.Windows.Forms.Button();
             this.btnRead = new System.Windows.Forms.Button();
+            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPageContent = new System.Windows.Forms.TextBox();
             this.txtPage = new System.Windows.Forms.TextBox();
@@ -48,7 +49,7 @@
             this.chkParagraphs = new System.Windows.Forms.CheckBox();
             this.chkTables = new System.Windows.Forms.CheckBox();
             this.chkLines = new System.Windows.Forms.CheckBox();
-            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
+            this.btnHtmlExport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -63,6 +64,7 @@
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer.Panel1.Controls.Add(this.btnHtmlExport);
             this.splitContainer.Panel1.Controls.Add(this.btnCheckAllPages);
             this.splitContainer.Panel1.Controls.Add(this.btnViewRawContent);
             this.splitContainer.Panel1.Controls.Add(this.btnRead);
@@ -133,6 +135,21 @@
             this.btnRead.Text = "Read";
             this.btnRead.UseVisualStyleBackColor = true;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
+            // 
+            // fileOpen
+            // 
+            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileOpen.BrowserCaption = "";
+            this.fileOpen.DefaultExtension = "";
+            this.fileOpen.FileFilters = "";
+            this.fileOpen.Folder = "";
+            this.fileOpen.Location = new System.Drawing.Point(12, 26);
+            this.fileOpen.Name = "fileOpen";
+            this.fileOpen.ReadOnly = false;
+            this.fileOpen.Size = new System.Drawing.Size(228, 20);
+            this.fileOpen.TabIndex = 6;
+            this.fileOpen.Value = null;
             // 
             // label1
             // 
@@ -293,20 +310,16 @@
             this.chkLines.UseVisualStyleBackColor = true;
             this.chkLines.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
             // 
-            // fileOpen
+            // btnHtmlExport
             // 
-            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileOpen.BrowserCaption = "";
-            this.fileOpen.DefaultExtension = "";
-            this.fileOpen.FileFilters = "";
-            this.fileOpen.Folder = "";
-            this.fileOpen.Location = new System.Drawing.Point(12, 26);
-            this.fileOpen.Name = "fileOpen";
-            this.fileOpen.ReadOnly = false;
-            this.fileOpen.Size = new System.Drawing.Size(228, 20);
-            this.fileOpen.TabIndex = 6;
-            this.fileOpen.Value = null;
+            this.btnHtmlExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHtmlExport.Location = new System.Drawing.Point(192, 136);
+            this.btnHtmlExport.Name = "btnHtmlExport";
+            this.btnHtmlExport.Size = new System.Drawing.Size(104, 23);
+            this.btnHtmlExport.TabIndex = 8;
+            this.btnHtmlExport.Text = "Export to HTML";
+            this.btnHtmlExport.UseVisualStyleBackColor = true;
+            this.btnHtmlExport.Click += new System.EventHandler(this.btnHtmlExport_Click);
             // 
             // frmRenderer
             // 
@@ -348,6 +361,7 @@
         private System.Windows.Forms.Button btnViewRawContent;
         private System.Windows.Forms.CheckBox chkTextRealSize;
         private System.Windows.Forms.Button btnCheckAllPages;
+        private System.Windows.Forms.Button btnHtmlExport;
     }
 }
 

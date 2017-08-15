@@ -67,6 +67,7 @@
     <Compile Include="frmRenderer.Designer.cs">
       <DependentUpon>frmRenderer.cs</DependentUpon>
     </Compile>
+    <Compile Include="HtmlConverter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FileOpen.resx">
@@ -86,6 +87,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -106,6 +108,12 @@
       <Project>{9883fa0a-cb8e-4053-a3e9-58ffe5269320}</Project>
       <Name>BuildTablesFromPdf.Engine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HTML_Header.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HTML_Footer.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

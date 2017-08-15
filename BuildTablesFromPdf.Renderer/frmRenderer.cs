@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -229,6 +231,20 @@ namespace BuildTablesFromPdf.Renderer
                 page.DetermineParagraphs();
                 page.FillContent();
             }
+        }
+
+        private void btnHtmlExport_Click(object sender, EventArgs e)
+        {
+            foreach (Page page in _pages.Where(_ => !_.IsRefreshed))
+            {
+                page.DetermineTableStructures();
+                page.DetermineParagraphs();
+                page.FillContent();
+            }
+
+            string htmlFileName = fileOpen.Text + ".html";
+            File.WriteAllText(htmlFileName, HtmlConverter.Convert(_pages));
+            Process.Start(htmlFileName);
         }
 
 

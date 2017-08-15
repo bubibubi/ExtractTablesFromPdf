@@ -21,7 +21,22 @@ namespace BuildTablesFromPdf.Engine
         /// in pdf files, are box filled
         /// </summary>
         public static float Tolerance = 2f;
- 
+
+
+        public static PageCollection ReadPdfFileAndRefreshContent(string fileName)
+        {
+            PageCollection pages = ContentExtractor.Read(fileName);
+            foreach (Page page in pages)
+            {
+                page.DetermineTableStructures();
+                page.DetermineParagraphs();
+
+                page.FillContent();
+            }
+            return pages;
+        }
+
+
         public static PageCollection Read(string filePath)
         {
 
@@ -143,12 +158,14 @@ namespace BuildTablesFromPdf.Engine
                     }
                     else if (statement.EndsWith(" re"))
                     {
+                        // ReSharper disable AccessToModifiedClosure
                         var lines =
                             new RectangleStatement(statement)
                             .GetLines()
                             .Where(_ => graphicState.TransformMatrix.TransformPoint(_.StartPoint) != graphicState.TransformMatrix.TransformPoint(_.EndPoint))
                             .Select(_ => graphicState.TransformMatrix.TransformLine(_).Rotate(page.Rotation))
                             ;
+                        // ReSharper restore AccessToModifiedClosure
                         if (!IgnoreWhiteLines || !graphicState.Color.IsWhite())
                             page.AllLines.AddRange(lines);
                         else

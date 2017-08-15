@@ -10,17 +10,14 @@ namespace BuildTablesFromPdf
         static void Main(string[] args)
         {
 
-            Matrix matrix = new Matrix(1,0,-1,0,50,60);
-            Console.WriteLine(matrix * Matrix.Identity);
-            Console.WriteLine(Matrix.Identity * matrix);
+            var pages = ContentExtractor.Read(@"Example.PDF");
+            var page = pages[0];
 
+            page.DetermineTableStructures();
+            page.DetermineParagraphs();
+            page.FillContent();
 
-            //ExtractByLocation.Read(@"C:\Users\Utente\Desktop\CR2993\GLOBAL_SISTEMI.PDF");
-
-            var pages = ContentExtractor.Read(@"C:\Users\Utente\Desktop\CR2993\GLOBAL_SISTEMI.PDF");
-
-            pages[2].DetermineTableStructures();
-
+            Console.WriteLine(page);
 
             Console.ReadLine();
         }

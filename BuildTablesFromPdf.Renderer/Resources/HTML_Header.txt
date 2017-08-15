@@ -1,0 +1,9 @@
+<html>
+	<head>
+		<style>
+			table { border: 1px solid black; border-spacing: 0; }
+			th { border: 1px solid black; }
+			td { border: 1px solid black; }
+		</style>
+	</head>
+	<body>
