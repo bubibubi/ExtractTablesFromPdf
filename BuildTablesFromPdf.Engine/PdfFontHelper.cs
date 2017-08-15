@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using BuildTablesFromPdf.Engine.CMap;
 using iTextSharp.text.pdf;
 
@@ -9,6 +10,12 @@ namespace BuildTablesFromPdf.Engine
 {
     static class PdfFontHelper
     {
+        public static PdfDictionary GetFont(PdfReader pdfReader, int pageNumber, string fontKey)
+        {
+            PdfDictionary resources = pdfReader.GetPageN(pageNumber).GetAsDict(PdfName.RESOURCES);
+            return FindFontDictionary(resources, fontKey);
+        }
+
         public static void ExtractFontNameOfPdf(string sourceFileName)
         {
             using (Stream pdfStream = new FileStream(sourceFileName, FileMode.Open))
@@ -76,14 +83,13 @@ namespace BuildTablesFromPdf.Engine
         public static CMapToUnicode GetFontCMapToUnicode(PdfReader pdfReader, int pageNumber, string fontKey)
         {
             PdfDictionary resources = pdfReader.GetPageN(pageNumber).GetAsDict(PdfName.RESOURCES);
-            if (pageNumber == 65) Console.WriteLine();
             var fontDict = FindFontDictionary(resources, fontKey);
             if (fontDict == null)
                 return null;
             PRStream toUnicodeIndirectReference = (PRStream)PdfReader.GetPdfObject(fontDict.Get(PdfName.TOUNICODE));
             if (toUnicodeIndirectReference == null)
                 return null;
-            string toUnicode = System.Text.Encoding.UTF8.GetString(PdfReader.GetStreamBytes(toUnicodeIndirectReference));
+            string toUnicode = Encoding.UTF8.GetString(PdfReader.GetStreamBytes(toUnicodeIndirectReference));
 
             return CMapToUnicode.Parse(toUnicode);
         }
@@ -120,6 +126,16 @@ namespace BuildTablesFromPdf.Engine
 
         }
 
+
+        public static string ToUnicode(string content, CMapToUnicode cMapToUnicode, EncodingDifferenceToUnicode encodingDifferenceToUnicode)
+        {
+            if (cMapToUnicode != null)
+                return cMapToUnicode.ConvertToString(content);
+            else if (encodingDifferenceToUnicode != null)
+                return encodingDifferenceToUnicode.ConvertToString(content);
+            else
+                return content;
+        }
 
     }
 }

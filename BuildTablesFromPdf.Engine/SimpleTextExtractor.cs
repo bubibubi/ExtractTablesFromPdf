@@ -68,6 +68,7 @@ namespace BuildTablesFromPdf.Engine
             float leadingParameter = 0;
             Point position;
             CMapToUnicode cMapToUnicode = null;
+            EncodingDifferenceToUnicode encodingDifferenceToUnicode = null;
 
             double oldY = 0;
             string lineContent = null;
@@ -89,6 +90,7 @@ namespace BuildTablesFromPdf.Engine
                 {
                     string[] fontParameters = statement.Split(' ');
                     cMapToUnicode = PdfFontHelper.GetFontCMapToUnicode(pdfReader, pageNumber, fontParameters[fontParameters.Length - 3]);
+                    encodingDifferenceToUnicode = EncodingDifferenceToUnicode.Parse(PdfFontHelper.GetFont(pdfReader, pageNumber, fontParameters[fontParameters.Length - 3]));
                 }
                 else if (statement.EndsWith("Td"))
                 {
@@ -139,7 +141,7 @@ namespace BuildTablesFromPdf.Engine
                             content += PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
                         }
                         content = content.Trim();
-                        content = ToUnicode(content, cMapToUnicode);
+                        content = PdfFontHelper.ToUnicode(content, cMapToUnicode, encodingDifferenceToUnicode);
                         //line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
                         position = new Point(transformMatrix.TransformX(Point.Origin.X, Point.Origin.Y), transformMatrix.TransformY(Point.Origin.X, Point.Origin.Y));
                         if (oldY == position.Y)
@@ -165,7 +167,7 @@ namespace BuildTablesFromPdf.Engine
                     escapedContent = escapedContent.Remove(escapedContent.Length - 2);
                     string content = PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
                     content = content.Trim();
-                    content = ToUnicode(content, cMapToUnicode);
+                    content = PdfFontHelper.ToUnicode(content, cMapToUnicode, encodingDifferenceToUnicode);
                     //line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
                     position = new Point(transformMatrix.TransformX(Point.Origin.X, Point.Origin.Y), transformMatrix.TransformY(Point.Origin.X, Point.Origin.Y));
                     if (Math.Abs(oldY - position.Y) < 1)
@@ -194,13 +196,6 @@ namespace BuildTablesFromPdf.Engine
             string textFromPage = sb.ToString();
 
             return textFromPage;
-        }
-
-        private static string ToUnicode(string content, CMapToUnicode cMapToUnicode)
-        {
-            if (cMapToUnicode == null)
-                return content;
-            return cMapToUnicode.ConvertToString(content);
         }
     }
 }

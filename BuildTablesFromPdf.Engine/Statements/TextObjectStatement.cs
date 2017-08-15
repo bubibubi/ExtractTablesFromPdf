@@ -44,6 +44,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     if (float.TryParse(fontParameters[fontParameters.Length - 2], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out fontSize))
                         actualLineSettings.FontHeight = fontSize;
                     actualLineSettings.CMapToUnicode = PdfFontHelper.GetFontCMapToUnicode(PdfReader, PageNumber, fontParameters[fontParameters.Length - 3]);
+                    actualLineSettings.EncodingDifferenceToUnicode = EncodingDifferenceToUnicode.Parse(PdfFontHelper.GetFont(PdfReader, PageNumber, fontParameters[fontParameters.Length - 3]));
                 }
                 else if (rawContent.EndsWith("Td"))
                 {
@@ -96,7 +97,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
                     line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
-                    line.Content = ToUnicode(content, line.CMapToUnicode);
+                    line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
                     Lines.Add(line);
                 }
                 else if (rawContent.Trim().EndsWith("Tj"))
@@ -109,20 +110,13 @@ namespace BuildTablesFromPdf.Engine.Statements
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
                     line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
-                    line.Content = ToUnicode(content, line.CMapToUnicode);
+                    line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
                     Lines.Add(line);
                 }
 
 
             }
 
-        }
-
-        private string ToUnicode(string content, CMapToUnicode cMapToUnicode)
-        {
-            if (cMapToUnicode == null)
-                return content;
-            return cMapToUnicode.ConvertToString(content);
         }
     }
 }

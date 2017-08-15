@@ -9,7 +9,7 @@ namespace BuildTablesFromPdf.Engine.Statements
         public Point Position { get; set; }
         public string Content { get; set; }
         public CMapToUnicode CMapToUnicode { get; set; }
-
+        public EncodingDifferenceToUnicode EncodingDifferenceToUnicode { get; set; }
 
         #region ICloneable Members
 
@@ -20,7 +20,8 @@ namespace BuildTablesFromPdf.Engine.Statements
                 CMapToUnicode = CMapToUnicode,
                 FontHeight = FontHeight,
                 Position = Position,
-                Content = Content
+                Content = Content,
+                EncodingDifferenceToUnicode = EncodingDifferenceToUnicode
             };    
         }
 

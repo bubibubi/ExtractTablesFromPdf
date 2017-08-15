@@ -46,6 +46,11 @@
     <Compile Include="CMap\BFRange.cs" />
     <Compile Include="CMap\BFRangeCollection.cs" />
     <Compile Include="CMap\CMapToUnicode.cs" />
+    <Compile Include="CMap\EncodingDifference.cs" />
+    <Compile Include="CMap\EncodingDifferenceCollection.cs" />
+    <Compile Include="CMap\EncodingDifferenceToUnicode.cs" />
+    <Compile Include="CMap\NameCharacter.cs" />
+    <Compile Include="CMap\NameCharacterCollection.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="GraphicState.cs" />
     <Compile Include="IPageContent.cs" />
