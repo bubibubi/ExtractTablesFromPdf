@@ -87,8 +87,8 @@ namespace BuildTablesFromPdf.Engine.Statements
                     if (string.IsNullOrEmpty(content)) 
                         continue;
                     var line = actualLineSettings.Clone();
-                    line.FontHeight = line.FontHeight * transformMatrix.a;
-                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
+                    line.FontHeight = line.FontHeight * transformMatrix.a * BaseTransformMatrix.a;
+                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
                     line.Content = content;
                     Lines.Add(line);
                 }
@@ -100,8 +100,8 @@ namespace BuildTablesFromPdf.Engine.Statements
                     string content = PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
                     
                     var line = actualLineSettings.Clone();
-                    line.FontHeight = line.FontHeight * transformMatrix.a;
-                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
+                    line.FontHeight = line.FontHeight * transformMatrix.a * BaseTransformMatrix.a;
+                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
                     line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
                     Lines.Add(line);
                 }
