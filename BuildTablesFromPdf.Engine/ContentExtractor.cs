@@ -71,7 +71,12 @@ namespace BuildTablesFromPdf.Engine
                 string statement = Statement.GetNextStatement(rawPdfContent, ref pointer);
                 while (statement != null)
                 {
-                    if (statement == "BT")
+                    // Embedded image
+                    if (statement.EndsWith("BI"))
+                    {
+                        pointer = rawPdfContent.IndexOf("\nEI", pointer, StringComparison.Ordinal);
+                    } 
+                    else if (statement == "BT")
                     {
                         currentMultilineStatement = new TextObjectStatement(pdfReader, i + 1, graphicState.TransformMatrix);
                         page.Statements.Add(currentMultilineStatement);
@@ -139,7 +144,13 @@ namespace BuildTablesFromPdf.Engine
                         var destinationPoint = graphicState.TransformMatrix.TransformPoint(lineToStatement.Point).Rotate(page.Rotation);
                         if (currentPoint != destinationPoint)
                         {
-                            page.AllLines.Add(new Line(currentPoint, destinationPoint));
+                            if (!IgnoreWhiteLines || !graphicState.Color.IsWhite())
+                                page.AllLines.Add(new Line(currentPoint, destinationPoint));
+                            else
+                            {
+                                if (ShowParserInfo)
+                                    Console.WriteLine("Ignored rectangle");
+                            }
                             currentPoint = destinationPoint;
                         }
                     }

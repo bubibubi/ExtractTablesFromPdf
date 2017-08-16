@@ -80,7 +80,12 @@ namespace BuildTablesFromPdf.Engine
             while (statement != null)
             {
 
-                if (statement.EndsWith("Tm"))
+                // Embedded image
+                if (statement.EndsWith("BI"))
+                {
+                    pointer = rawPdfContent.IndexOf("\nEI", pointer, StringComparison.Ordinal);
+                }
+                else if (statement.EndsWith("Tm"))
                 {
                     Matrix matrix;
                     if (Matrix.TryParse(statement, out matrix))
@@ -129,19 +134,9 @@ namespace BuildTablesFromPdf.Engine
                 }
                 else if (statement.EndsWith("TJ"))
                 {
-                    string rawArray = statement.Remove(statement.Length - 2).Trim();
-                    if (!string.IsNullOrWhiteSpace(rawArray))
+                    string content = TextObjectStatement.GetTJContent(statement, cMapToUnicode, encodingDifferenceToUnicode).Trim();
+                    if (!string.IsNullOrEmpty(content))
                     {
-                        PdfArrayDataType pdfArrayDataType = PdfArrayDataType.Parse(rawArray);
-                        string content = string.Empty;
-                        foreach (string item in pdfArrayDataType.Elements.Where(_ => _ is string))
-                        {
-                            string escapedContent;
-                            escapedContent = item.Trim();
-                            content += PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
-                        }
-                        content = content.Trim();
-                        content = PdfFontHelper.ToUnicode(content, cMapToUnicode, encodingDifferenceToUnicode);
                         //line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
                         position = new Point(transformMatrix.TransformX(Point.Origin.X, Point.Origin.Y), transformMatrix.TransformY(Point.Origin.X, Point.Origin.Y));
                         if (oldY == position.Y)

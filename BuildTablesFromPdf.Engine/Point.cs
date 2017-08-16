@@ -120,8 +120,9 @@ namespace BuildTablesFromPdf.Engine
 
         public static Point Parse(string rawContent)
         {
-            float x = float.Parse(rawContent.Split(' ')[0], NumberFormatInfo.InvariantInfo);
-            float y = float.Parse(rawContent.Split(' ')[1], NumberFormatInfo.InvariantInfo);
+            var splittedRawContent = rawContent.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            float x = float.Parse(splittedRawContent[0], NumberFormatInfo.InvariantInfo);
+            float y = float.Parse(splittedRawContent[1], NumberFormatInfo.InvariantInfo);
             return new Point(x, y);
         }
 

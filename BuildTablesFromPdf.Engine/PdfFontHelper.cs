@@ -137,5 +137,14 @@ namespace BuildTablesFromPdf.Engine
                 return content;
         }
 
+        public static char ToUnicode(int character, CMapToUnicode cMapToUnicode, EncodingDifferenceToUnicode encodingDifferenceToUnicode)
+        {
+            if (cMapToUnicode != null)
+                return cMapToUnicode.ConvertToUnicodeChar(character);
+            else if (encodingDifferenceToUnicode != null)
+                return encodingDifferenceToUnicode.ConvertToUnicodeChar(character);
+            else
+                return Convert.ToChar(character);
+        }
     }
 }

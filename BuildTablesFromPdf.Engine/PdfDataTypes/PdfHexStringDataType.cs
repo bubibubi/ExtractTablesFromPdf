@@ -49,5 +49,16 @@ namespace BuildTablesFromPdf.Engine
 
             return content;
         }
+
+        public static int GetHexContent(string escapedContent)
+        {
+            if (escapedContent == null) throw new ArgumentNullException("escapedContent");
+
+            if (!escapedContent.StartsWith("<") || !escapedContent.EndsWith(">"))
+                throw new ArgumentException(String.Format("Error retrieving content from escaped content '{0}'", escapedContent), "escapedContent");
+
+            return int.Parse(escapedContent.Substring(1, escapedContent.Length - 2), System.Globalization.NumberStyles.HexNumber);
+        }
+
     }
 }

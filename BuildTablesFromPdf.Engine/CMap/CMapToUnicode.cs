@@ -23,12 +23,12 @@ namespace BuildTablesFromPdf.Engine.CMap
 
         public char ConvertToUnicodeChar(int cid)
         {
-            return (char) ConvertToUnicode(cid);
+            return Convert.ToChar(ConvertToUnicode(cid));
         }
 
         public char ConvertToUnicodeChar(char cid)
         {
-            return (char)ConvertToUnicode(cid);
+            return Convert.ToChar(ConvertToUnicode(cid));
         }
 
 
@@ -50,10 +50,18 @@ namespace BuildTablesFromPdf.Engine.CMap
         {
             CMapToUnicode parse = new CMapToUnicode();
 
+            InternalParseBFRange(s, parse);
+            InternalParseBFChar(s, parse);
+
+            return parse.BFRanges.Count == 0 ? null : parse;
+        }
+
+        private static void InternalParseBFRange(string s, CMapToUnicode parse)
+        {
             string bfRange;
             int beginBfRangePosition = s.IndexOf("beginbfrange", StringComparison.CurrentCultureIgnoreCase);
             if (beginBfRangePosition == -1)
-                return null;
+                return;
             beginBfRangePosition += 12;
 
             int endBfRangePosition = s.IndexOf("endbfrange", beginBfRangePosition, StringComparison.CurrentCultureIgnoreCase);
@@ -66,9 +74,28 @@ namespace BuildTablesFromPdf.Engine.CMap
                 parse.BFRanges.Add(BFRange.Parse(bfRange, ref i));
                 Statement.SkipSpace(bfRange, ref i);
             }
-
-            return parse;
         }
+
+        private static void InternalParseBFChar(string s, CMapToUnicode parse)
+        {
+            string bfChar;
+            int beginBfCharPosition = s.IndexOf("beginbfchar", StringComparison.CurrentCultureIgnoreCase);
+            if (beginBfCharPosition == -1)
+                return;
+            beginBfCharPosition += 12;
+
+            int endBfCharPosition = s.IndexOf("endbfchar", beginBfCharPosition, StringComparison.CurrentCultureIgnoreCase);
+            bfChar = s.Substring(beginBfCharPosition, endBfCharPosition - beginBfCharPosition);
+
+            int i = 0;
+            Statement.SkipSpace(bfChar, ref i);
+            while (i < bfChar.Length)
+            {
+                parse.BFRanges.Add(BFChar.Parse(bfChar, ref i));
+                Statement.SkipSpace(bfChar, ref i);
+            }
+        }
+
 
     }
 }

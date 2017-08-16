@@ -83,21 +83,13 @@ namespace BuildTablesFromPdf.Engine.Statements
                 }
                 else if (rawContent.EndsWith("TJ"))
                 {
-                    string rawArray = rawContent.Remove(rawContent.Length - 2).Trim();
-                    if (string.IsNullOrWhiteSpace(rawArray))
+                    string content = GetTJContent(rawContent, actualLineSettings.CMapToUnicode, actualLineSettings.EncodingDifferenceToUnicode);
+                    if (string.IsNullOrEmpty(content)) 
                         continue;
-                    PdfArrayDataType pdfArrayDataType = PdfArrayDataType.Parse(rawArray);
-                    string content = string.Empty;
-                    foreach (string item in pdfArrayDataType.Elements.Where(_ => _ is string))
-                    {
-                        string escapedContent;
-                        escapedContent = item.Trim();
-                        content += PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
-                    }
                     var line = actualLineSettings.Clone();
                     line.FontHeight = line.FontHeight * transformMatrix.a;
                     line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
-                    line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
+                    line.Content = content;
                     Lines.Add(line);
                 }
                 else if (rawContent.Trim().EndsWith("Tj"))
@@ -117,6 +109,26 @@ namespace BuildTablesFromPdf.Engine.Statements
 
             }
 
+        }
+
+        public static string GetTJContent(string rawContent, CMapToUnicode cMapToUnicode, EncodingDifferenceToUnicode encodingDifferenceToUnicode)
+        {
+            string content;
+            string rawArray = rawContent.Remove(rawContent.Length - 2).Trim();
+            if (string.IsNullOrWhiteSpace(rawArray))
+                return null;
+            PdfArrayDataType pdfArrayDataType = PdfArrayDataType.Parse(rawArray);
+            content = string.Empty;
+            foreach (string item in pdfArrayDataType.Elements.Where(_ => _ is string))
+            {
+                string escapedContent;
+                escapedContent = item.Trim();
+                content +=
+                    PdfHexStringDataType.IsStartChar(escapedContent) ? PdfFontHelper.ToUnicode(PdfHexStringDataType.GetHexContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode).ToString() : PdfFontHelper.ToUnicode(PdfStringDataType.GetContentFromEscapedContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode);
+            }
+            if (content.Contains("Media"))
+                Console.WriteLine();
+            return content;
         }
     }
 }

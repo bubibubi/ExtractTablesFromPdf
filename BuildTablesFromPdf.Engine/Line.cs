@@ -193,9 +193,9 @@ namespace BuildTablesFromPdf.Engine
 
             if (this.StartPoint <= line.StartPoint && line.EndPoint <= this.EndPoint)
                 return this;
-            else if (this.StartPoint <= line.StartPoint && line.StartPoint <= this.EndPoint && this.EndPoint <= line.EndPoint)
+            else if (this.StartPoint <= line.StartPoint && line.StartPoint <= this.EndPoint && this.EndPoint <= line.EndPoint && this.StartPoint != line.EndPoint)
                 return new Line(this.StartPoint, line.EndPoint);
-            else if (line.StartPoint <= this.StartPoint && this.StartPoint <= line.EndPoint && line.EndPoint <= this.EndPoint)
+            else if (line.StartPoint <= this.StartPoint && this.StartPoint <= line.EndPoint && line.EndPoint <= this.EndPoint && line.StartPoint != this.EndPoint)
                 return new Line(line.StartPoint, this.EndPoint);
             else if (line.StartPoint <= this.StartPoint && this.EndPoint <= line.EndPoint)
                 return line;

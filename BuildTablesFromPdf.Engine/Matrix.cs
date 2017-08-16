@@ -75,7 +75,7 @@ namespace BuildTablesFromPdf.Engine
 
         public static Matrix Parse(string s)
         {
-            string[] parts = s.Split(' ');
+            string[] parts = s.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length < 6)
                 throw new FormatException("s is not a transformation matrix");
 

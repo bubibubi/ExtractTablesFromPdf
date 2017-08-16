@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SimpleTextExtractorTest.cs" />
     <Compile Include="BuildTablesFromPdfTest.cs" />
     <Compile Include="MHDiff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +68,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="TestFiles\Test1.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFiles\Test2.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestFiles\Test3.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
