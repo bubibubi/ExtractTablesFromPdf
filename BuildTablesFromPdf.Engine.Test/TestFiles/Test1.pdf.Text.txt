@@ -1,0 +1,18 @@
+This is the first paragraph
+T1.H T1.H2 T1.H3 T1.H4 T1.H5 T1.H6
+2 3 4 5 6
+2 4 6 8 0 2
+3 6 9 2 5 8
+This is a table (because the text is inside lines
+This is the second paragraph
+T2.H T2.H2 T2.H3 T2.H4
+Outside T2  2 3 4
+2 4 6 8
+3 6 9 2
+The page content is
+Paragraph
+Table
+Table
+Paragraph
+Table (with text outside)
+This paragraphs
