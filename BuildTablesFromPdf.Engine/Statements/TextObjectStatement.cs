@@ -23,7 +23,7 @@ namespace BuildTablesFromPdf.Engine.Statements
             Lines = new List<TextObjectStatementLine>();
 
             TextObjectStatementLine actualLineSettings = new TextObjectStatementLine();
-            Matrix transformMatrix = Matrix.Identity;
+            Matrix textTransformMatrix = Matrix.Identity;
             Point position = new Point();
             float leadingParameter = 0;
 
@@ -35,7 +35,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                 {
                     Matrix matrix;
                     if (Matrix.TryParse(rawContent, out matrix))
-                        transformMatrix = matrix;
+                        textTransformMatrix = matrix;
                 }
                 else if (rawContent.EndsWith("Tf"))
                 {
@@ -54,7 +54,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     if (
                         float.TryParse(parameters[0], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out tx) && 
                         float.TryParse(parameters[1], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out ty))
-                    transformMatrix = new Matrix(1, 0, 0, 1, tx, ty);
+                    textTransformMatrix = new Matrix(1, 0, 0, 1, tx, ty);
                 }
                 else if (rawContent.EndsWith("TD"))
                 {
@@ -65,7 +65,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                         float.TryParse(parameters[0], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out tx) &&
                         float.TryParse(parameters[1], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out ty))
                     {
-                        transformMatrix = new Matrix(1, 0, 0, 1, tx, ty) * transformMatrix;
+                        textTransformMatrix = new Matrix(1, 0, 0, 1, tx, ty) * textTransformMatrix;
                         leadingParameter = -ty;
                     }
                 }
@@ -79,7 +79,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                 }
                 else if (rawContent.EndsWith("T*"))
                 {
-                    transformMatrix = new Matrix(1, 0, 0, 1, 0, -leadingParameter) * transformMatrix;
+                    textTransformMatrix = new Matrix(1, 0, 0, 1, 0, -leadingParameter) * textTransformMatrix;
                 }
                 else if (rawContent.EndsWith("TJ"))
                 {
@@ -87,8 +87,9 @@ namespace BuildTablesFromPdf.Engine.Statements
                     if (string.IsNullOrEmpty(content)) 
                         continue;
                     var line = actualLineSettings.Clone();
-                    line.FontHeight = line.FontHeight * transformMatrix.a * BaseTransformMatrix.a;
-                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
+                    line.FontHeight =
+                        line.FontHeight * textTransformMatrix.a * (pageRotation == 90 || pageRotation == 270 ? BaseTransformMatrix.b : BaseTransformMatrix.a);
+                    line.Position = BaseTransformMatrix.TransformPoint(new Point(textTransformMatrix.TransformX(position.X, position.Y + line.FontHeight), textTransformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
                     line.Content = content;
                     Lines.Add(line);
                 }
@@ -100,8 +101,9 @@ namespace BuildTablesFromPdf.Engine.Statements
                     string content = PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
                     
                     var line = actualLineSettings.Clone();
-                    line.FontHeight = line.FontHeight * transformMatrix.a * BaseTransformMatrix.a;
-                    line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
+                    line.FontHeight =
+                        line.FontHeight * textTransformMatrix.a * (pageRotation == 90 || pageRotation == 270 ? BaseTransformMatrix.b : BaseTransformMatrix.a);
+                    line.Position = BaseTransformMatrix.TransformPoint(new Point(textTransformMatrix.TransformX(position.X, position.Y + line.FontHeight), textTransformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
                     line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
                     Lines.Add(line);
                 }
