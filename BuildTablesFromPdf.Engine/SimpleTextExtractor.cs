@@ -134,9 +134,11 @@ namespace BuildTablesFromPdf.Engine
                 }
                 else if (statement.EndsWith("TJ"))
                 {
-                    string content = TextObjectStatement.GetTJContent(statement, cMapToUnicode, encodingDifferenceToUnicode).Trim();
-                    if (!string.IsNullOrEmpty(content))
+                    string content = TextObjectStatement.GetTJContent(statement, cMapToUnicode, encodingDifferenceToUnicode);
+                    if (!string.IsNullOrWhiteSpace(content))
                     {
+                        content = content.Trim();
+
                         //line.Position = BaseTransformMatrix.TransformPoint(new Point(transformMatrix.TransformX(position.X, position.Y), transformMatrix.TransformY(position.X, position.Y) + line.FontHeight)).Rotate(pageRotation);
                         position = new Point(transformMatrix.TransformX(Point.Origin.X, Point.Origin.Y), transformMatrix.TransformY(Point.Origin.X, Point.Origin.Y));
                         if (oldY == position.Y)

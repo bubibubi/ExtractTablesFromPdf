@@ -38,7 +38,7 @@ namespace BuildTablesFromPdf.Engine
 
             if (!escapedContent.StartsWith("<") || !escapedContent.EndsWith(">"))
                 throw new ArgumentException(String.Format("Error retrieving content from escaped content '{0}'", escapedContent), "escapedContent");
-            
+
             string content = string.Empty;
             for (int i = 1; i < escapedContent.Length - 1; i += 2)
             {
@@ -50,14 +50,37 @@ namespace BuildTablesFromPdf.Engine
             return content;
         }
 
-        public static int GetHexContent(string escapedContent)
+        public static int[] GetHexContent(string escapedContent)
         {
             if (escapedContent == null) throw new ArgumentNullException("escapedContent");
 
             if (!escapedContent.StartsWith("<") || !escapedContent.EndsWith(">"))
                 throw new ArgumentException(String.Format("Error retrieving content from escaped content '{0}'", escapedContent), "escapedContent");
 
-            return int.Parse(escapedContent.Substring(1, escapedContent.Length - 2), System.Globalization.NumberStyles.HexNumber);
+            string hexContentString = escapedContent.Substring(1, escapedContent.Length - 2);
+            if (hexContentString.Length < 5)
+                return new[] { int.Parse(hexContentString, System.Globalization.NumberStyles.HexNumber) };
+
+            if ((hexContentString.Length & 0x01) != 0)
+                throw new ArgumentException("Odd number of hex characters");
+
+            int[] content;
+            if ((hexContentString.Length & 0x03) != 0)
+            {
+                content = new int[hexContentString.Length >> 1];
+                // Bytes
+                for (int i = 0; i < hexContentString.Length >> 1; i++)
+                    content[i] = int.Parse(hexContentString.Substring(i << 1, 2), System.Globalization.NumberStyles.HexNumber);
+            }
+            else
+            {
+                content = new int[hexContentString.Length >> 2];
+                // Words
+                for (int i = 0; i < hexContentString.Length >> 2; i ++)
+                    content[i] = int.Parse(hexContentString.Substring(i << 2, 4), System.Globalization.NumberStyles.HexNumber);
+            }
+
+            return content;
         }
 
     }

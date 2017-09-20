@@ -126,7 +126,9 @@ namespace BuildTablesFromPdf.Engine.Statements
                 string escapedContent;
                 escapedContent = item.Trim();
                 content +=
-                    PdfHexStringDataType.IsStartChar(escapedContent) ? PdfFontHelper.ToUnicode(PdfHexStringDataType.GetHexContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode).ToString() : PdfFontHelper.ToUnicode(PdfStringDataType.GetContentFromEscapedContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode);
+                    PdfHexStringDataType.IsStartChar(escapedContent) ? 
+                    PdfFontHelper.ToUnicode(PdfHexStringDataType.GetHexContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode).ToString() : 
+                    PdfFontHelper.ToUnicode(PdfStringDataType.GetContentFromEscapedContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode);
             }
             if (content.Contains("Media"))
                 Console.WriteLine();

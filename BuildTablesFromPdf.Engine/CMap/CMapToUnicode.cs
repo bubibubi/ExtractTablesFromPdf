@@ -40,6 +40,13 @@ namespace BuildTablesFromPdf.Engine.CMap
             return convert;
         }
 
+        public string ConvertToString(int[] content)
+        {
+            string convert = string.Empty;
+            foreach (int c in content)
+                convert += ConvertToUnicodeChar(c);
+            return convert;
+        }
 
         /// <summary>
         /// Parses the specified string.

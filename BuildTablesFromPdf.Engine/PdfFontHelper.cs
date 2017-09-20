@@ -137,6 +137,21 @@ namespace BuildTablesFromPdf.Engine
                 return content;
         }
 
+        public static string ToUnicode(int[] content, CMapToUnicode cMapToUnicode, EncodingDifferenceToUnicode encodingDifferenceToUnicode)
+        {
+            if (cMapToUnicode != null)
+                return cMapToUnicode.ConvertToString(content);
+            else if (encodingDifferenceToUnicode != null)
+                return encodingDifferenceToUnicode.ConvertToString(content);
+            else
+            {
+                byte[] byteContent = new byte[content.Length * sizeof(int)];
+                Buffer.BlockCopy(content, 0, byteContent, 0, byteContent.Length);
+                string stringContent = System.Text.Encoding.Unicode.GetString(byteContent);
+                return stringContent;
+            }
+        }
+
         public static char ToUnicode(int character, CMapToUnicode cMapToUnicode, EncodingDifferenceToUnicode encodingDifferenceToUnicode)
         {
             if (cMapToUnicode != null)
