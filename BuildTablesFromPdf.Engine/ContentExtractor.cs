@@ -76,12 +76,12 @@ namespace BuildTablesFromPdf.Engine
                     {
                         pointer = rawPdfContent.IndexOf("\nEI", pointer, StringComparison.Ordinal);
                     } 
-                    else if (statement == "BT")
+                    else if (statement.Trim() == "BT")
                     {
                         currentMultilineStatement = new TextObjectStatement(pdfReader, i + 1, graphicState.TransformMatrix);
                         page.Statements.Add(currentMultilineStatement);
                     }
-                    else if (statement == "ET")
+                    else if (statement.Trim() == "ET")
                     {
                         if (!(currentMultilineStatement is TextObjectStatement))
                             pages.Errors.Add("ET outside a text object");
