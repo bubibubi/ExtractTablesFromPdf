@@ -29,8 +29,9 @@ namespace BuildTablesFromPdf.Engine.Statements
 
             int pageRotation = PdfReader.GetPageRotation(PageNumber);
 
-            foreach (string rawContent in RawContent)
+            for (int index = 0; index < RawContent.Count; index++)
             {
+                string rawContent = RawContent[index];
                 if (rawContent.EndsWith("Tm"))
                 {
                     Matrix matrix;
@@ -40,6 +41,16 @@ namespace BuildTablesFromPdf.Engine.Statements
                 else if (rawContent.EndsWith("Tf"))
                 {
                     string[] fontParameters = rawContent.Split(' ');
+                    if (fontParameters.Length < 3)
+                    {
+                        // Try to retrieve from previous line. This is global a parsing issue
+                        if (index < 1)
+                            continue;
+
+                        fontParameters = (RawContent[index - 1].Trim() + " " + rawContent.Trim()).Split(' ');
+                        if (fontParameters.Length < 3)
+                            continue;
+                    }
                     float fontSize;
                     if (float.TryParse(fontParameters[fontParameters.Length - 2], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out fontSize))
                         actualLineSettings.FontHeight = fontSize;
@@ -52,9 +63,9 @@ namespace BuildTablesFromPdf.Engine.Statements
                     float ty;
                     string[] parameters = rawContent.Split(' ');
                     if (
-                        float.TryParse(parameters[0], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out tx) && 
+                        float.TryParse(parameters[0], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out tx) &&
                         float.TryParse(parameters[1], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out ty))
-                    textTransformMatrix = new Matrix(1, 0, 0, 1, tx, ty);
+                        textTransformMatrix = new Matrix(1, 0, 0, 1, tx, ty);
                 }
                 else if (rawContent.EndsWith("TD"))
                 {
@@ -84,7 +95,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                 else if (rawContent.EndsWith("TJ"))
                 {
                     string content = GetTJContent(rawContent, actualLineSettings.CMapToUnicode, actualLineSettings.EncodingDifferenceToUnicode);
-                    if (string.IsNullOrEmpty(content)) 
+                    if (string.IsNullOrEmpty(content))
                         continue;
                     var line = actualLineSettings.Clone();
                     line.FontHeight =
@@ -99,7 +110,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     escapedContent = rawContent.Trim();
                     escapedContent = escapedContent.Remove(escapedContent.Length - 2);
                     string content = PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
-                    
+
                     var line = actualLineSettings.Clone();
                     line.FontHeight =
                         line.FontHeight * textTransformMatrix.a * (pageRotation == 90 || pageRotation == 270 ? BaseTransformMatrix.b : BaseTransformMatrix.a);
@@ -107,10 +118,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
                     Lines.Add(line);
                 }
-
-
             }
-
         }
 
         public static string GetTJContent(string rawContent, CMapToUnicode cMapToUnicode, EncodingDifferenceToUnicode encodingDifferenceToUnicode)
