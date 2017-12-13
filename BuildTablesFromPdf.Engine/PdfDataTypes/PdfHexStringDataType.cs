@@ -35,7 +35,7 @@ namespace BuildTablesFromPdf.Engine
         public static string GetContent(string escapedContent)
         {
             if (escapedContent == null) throw new ArgumentNullException("escapedContent");
-
+            escapedContent = escapedContent.Trim();
             if (!escapedContent.StartsWith("<") || !escapedContent.EndsWith(">"))
                 throw new ArgumentException(String.Format("Error retrieving content from escaped content '{0}'", escapedContent), "escapedContent");
 
