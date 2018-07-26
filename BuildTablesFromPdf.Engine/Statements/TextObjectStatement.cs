@@ -54,8 +54,12 @@ namespace BuildTablesFromPdf.Engine.Statements
                     float fontSize;
                     if (float.TryParse(fontParameters[fontParameters.Length - 2], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out fontSize))
                         actualLineSettings.FontHeight = fontSize;
-                    actualLineSettings.CMapToUnicode = PdfFontHelper.GetFontCMapToUnicode(PdfReader, PageNumber, fontParameters[fontParameters.Length - 3]);
-                    actualLineSettings.EncodingDifferenceToUnicode = EncodingDifferenceToUnicode.Parse(PdfFontHelper.GetFont(PdfReader, PageNumber, fontParameters[fontParameters.Length - 3]));
+                    string fontKey = fontParameters[fontParameters.Length - 3];
+                    if (!string.IsNullOrWhiteSpace(fontKey))
+                    {
+                        actualLineSettings.CMapToUnicode = PdfFontHelper.GetFontCMapToUnicode(PdfReader, PageNumber, fontKey);
+                        actualLineSettings.EncodingDifferenceToUnicode = EncodingDifferenceToUnicode.Parse(PdfFontHelper.GetFont(PdfReader, PageNumber, fontKey));
+                    }
                 }
                 else if (rawContent.EndsWith("Td"))
                 {
