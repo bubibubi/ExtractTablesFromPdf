@@ -14,21 +14,16 @@ namespace BuildTablesFromPdf.Engine.Statements
 
             while (i < content.Length)
             {
-                if (content[i] == ' ')
+                if (IsSpace(content[i]))
                 {
                     if (readingStatement)
                     {
                         i++;
-                        return statement;
+                        return statement.Trim();
                     }
 
                     statement += " ";
                     i++;
-                }
-                else if (content[i] == '\n')
-                {
-                    i++;
-                    return statement;
                 }
                 else if (readingStatement && IsSeparator(content[i]))
                 {
