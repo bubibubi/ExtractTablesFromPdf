@@ -43,8 +43,7 @@ namespace BuildTablesFromPdf.Engine
             for (int i = 1; i < escapedContent.Length - 1; i += 2)
             {
                 char c = (char)int.Parse(escapedContent.Substring(i, 2), System.Globalization.NumberStyles.HexNumber);
-                if (c >= 32)
-                    content += c;
+                content += c;
             }
 
             return content;
