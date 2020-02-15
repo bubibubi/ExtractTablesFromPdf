@@ -1,29 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BuildTablesFromPdf.Engine
 {
     [DebuggerDisplay("{DebuggerDisplay}")]
     public class Paragraph : IPageContent, IFormattable
     {
+        private List<ParagraphContent> _Contents = new List<ParagraphContent>();
+
         public Paragraph(double y)
         {
+
             Y = y;
         }
 
         public double Y { get; private set; }
 
-        public string Content { get; set; }
+        public string Content
+        {
+            get
+            {
+                string result = null;
+                foreach (ParagraphContent content in _Contents.OrderBy(_ => _.Point.X))
+                {
+                    if (result == null)
+                        result = content.Content;
+                    else
+                        result = result + " " + content.Content;
+                }
+
+                return result;
+            }
+
+        }
 
         public void AddText(Point point, string content)
         {
             if (!Contains(point))
                 throw new InvalidOperationException("The point is not on the paragraph");
 
-            if (string.IsNullOrEmpty(Content))
-                Content = content;
-            else
-                Content += " " + content;
+            _Contents.Add(new ParagraphContent(point, content));
         }
 
         public bool Contains(Point point)
@@ -71,5 +89,19 @@ namespace BuildTablesFromPdf.Engine
 
         #endregion
 
+
+        private class ParagraphContent
+        {
+            public ParagraphContent(Point point, string content)
+            {
+                Point = point;
+                Content = content;
+            }
+
+            public Point Point { get; private set; }
+            public string Content { get; private set; }
+        }
+
     }
+
 }
