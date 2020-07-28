@@ -18,7 +18,14 @@ namespace BuildTablesFromPdf.Engine.CMap
             if (bfRange == null)
                 return cid;
 
-            return cid - bfRange.BeginChar + bfRange.UnicodeChar.Value;
+            if (bfRange.UnicodeChar == null)
+            {
+                return bfRange.UnicodeChars[cid - bfRange.BeginChar];
+            }
+            else
+            {
+                return cid - bfRange.BeginChar + bfRange.UnicodeChar.Value;
+            }
         }
 
         public char ConvertToUnicodeChar(int cid)
@@ -67,19 +74,21 @@ namespace BuildTablesFromPdf.Engine.CMap
         {
             string bfRange;
             int beginBfRangePosition = s.IndexOf("beginbfrange", StringComparison.CurrentCultureIgnoreCase);
-            if (beginBfRangePosition == -1)
-                return;
-            beginBfRangePosition += 12;
-
-            int endBfRangePosition = s.IndexOf("endbfrange", beginBfRangePosition, StringComparison.CurrentCultureIgnoreCase);
-            bfRange = s.Substring(beginBfRangePosition, endBfRangePosition - beginBfRangePosition);
-
-            int i = 0;
-            Statement.SkipSpace(bfRange, ref i);
-            while (i < bfRange.Length)
+            while (beginBfRangePosition != -1)
             {
-                parse.BFRanges.Add(BFRange.Parse(bfRange, ref i));
+                beginBfRangePosition += 12;
+
+                int endBfRangePosition = s.IndexOf("endbfrange", beginBfRangePosition, StringComparison.CurrentCultureIgnoreCase);
+                bfRange = s.Substring(beginBfRangePosition, endBfRangePosition - beginBfRangePosition);
+
+                int i = 0;
                 Statement.SkipSpace(bfRange, ref i);
+                while (i < bfRange.Length)
+                {
+                    parse.BFRanges.Add(BFRange.Parse(bfRange, ref i));
+                    Statement.SkipSpace(bfRange, ref i);
+                }
+                beginBfRangePosition = s.IndexOf("beginbfrange", endBfRangePosition, StringComparison.CurrentCultureIgnoreCase);
             }
         }
 
@@ -87,19 +96,21 @@ namespace BuildTablesFromPdf.Engine.CMap
         {
             string bfChar;
             int beginBfCharPosition = s.IndexOf("beginbfchar", StringComparison.CurrentCultureIgnoreCase);
-            if (beginBfCharPosition == -1)
-                return;
-            beginBfCharPosition += 12;
-
-            int endBfCharPosition = s.IndexOf("endbfchar", beginBfCharPosition, StringComparison.CurrentCultureIgnoreCase);
-            bfChar = s.Substring(beginBfCharPosition, endBfCharPosition - beginBfCharPosition);
-
-            int i = 0;
-            Statement.SkipSpace(bfChar, ref i);
-            while (i < bfChar.Length)
+            while (beginBfCharPosition == -1)
             {
-                parse.BFRanges.Add(BFChar.Parse(bfChar, ref i));
+                beginBfCharPosition += 12;
+
+                int endBfCharPosition = s.IndexOf("endbfchar", beginBfCharPosition, StringComparison.CurrentCultureIgnoreCase);
+                bfChar = s.Substring(beginBfCharPosition, endBfCharPosition - beginBfCharPosition);
+
+                int i = 0;
                 Statement.SkipSpace(bfChar, ref i);
+                while (i < bfChar.Length)
+                {
+                    parse.BFRanges.Add(BFChar.Parse(bfChar, ref i));
+                    Statement.SkipSpace(bfChar, ref i);
+                }
+                beginBfCharPosition = s.IndexOf("beginbfchar", endBfCharPosition, StringComparison.CurrentCultureIgnoreCase);
             }
         }
 

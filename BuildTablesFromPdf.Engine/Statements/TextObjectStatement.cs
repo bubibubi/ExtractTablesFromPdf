@@ -142,8 +142,6 @@ namespace BuildTablesFromPdf.Engine.Statements
                     PdfFontHelper.ToUnicode(PdfHexStringDataType.GetHexContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode).ToString() : 
                     PdfFontHelper.ToUnicode(PdfStringDataType.GetContentFromEscapedContent(escapedContent), cMapToUnicode, encodingDifferenceToUnicode);
             }
-            if (content.Contains("Media"))
-                Console.WriteLine();
             return content;
         }
     }
