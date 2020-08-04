@@ -69,7 +69,7 @@ namespace BuildTablesFromPdf.Engine.Statements
                     if (
                         float.TryParse(parameters[0], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out tx) &&
                         float.TryParse(parameters[1], NumberStyles.Any, NumberFormatInfo.InvariantInfo, out ty))
-                        textTransformMatrix = new Matrix(1, 0, 0, 1, tx, ty);
+                        textTransformMatrix = new Matrix(1, 0, 0, 1, tx, ty) * textTransformMatrix;
                 }
                 else if (rawContent.EndsWith("TD"))
                 {
@@ -121,6 +121,11 @@ namespace BuildTablesFromPdf.Engine.Statements
                     line.Position = BaseTransformMatrix.TransformPoint(new Point(textTransformMatrix.TransformX(position.X, position.Y + line.FontHeight), textTransformMatrix.TransformY(position.X, position.Y + line.FontHeight))).Rotate(pageRotation);
                     line.Content = PdfFontHelper.ToUnicode(content, line.CMapToUnicode, line.EncodingDifferenceToUnicode);
                     Lines.Add(line);
+                }
+                else
+                {
+                    if (ContentExtractor.ShowParserInfo)
+                        Console.WriteLine(rawContent);
                 }
             }
         }

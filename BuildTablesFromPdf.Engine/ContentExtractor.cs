@@ -91,10 +91,38 @@ namespace BuildTablesFromPdf.Engine
                             currentMultilineStatement = null;
                         }
                     }
-                    else if (currentMultilineStatement != null)
+                    else if (statement.EndsWith(" rg"))
                     {
-                        currentMultilineStatement.RawContent.Add(statement);
+                        graphicState.Color = new NonStrokingColorStatement(statement).Color;
                     }
+                    else if (statement.EndsWith(" RG"))
+                    {
+                        graphicState.Color = new StrokingColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" G"))
+                    {
+                        graphicState.Color = new GreyColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" g"))
+                    {
+                        graphicState.Color = new GreyColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" SCN"))
+                    {
+                        graphicState.Color = new StrokingColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" scn"))
+                    {
+                        graphicState.Color = new NonStrokingColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" SC"))
+                    {
+                        graphicState.Color = new StrokingColorStatement(statement).Color;
+                    }
+                    else if (statement.EndsWith(" sc"))
+                    {
+                        graphicState.Color = new NonStrokingColorStatement(statement).Color;
+                    }                    
                     else if (statement == "q")
                     {
                         graphicStateStack.Push(graphicState.Clone());
@@ -117,22 +145,6 @@ namespace BuildTablesFromPdf.Engine
                     else if (statement.EndsWith(" j"))
                     {
                         page.Statements.Add(new LineJoinStyleStatement(statement));
-                    }
-                    else if (statement.EndsWith(" rg"))
-                    {
-                        graphicState.Color = new NonStrokingColorStatement(statement).Color;
-                    }
-                    else if (statement.EndsWith(" RG"))
-                    {
-                        graphicState.Color = new StrokingColorStatement(statement).Color;
-                    }
-                    else if (statement.EndsWith(" G"))
-                    {
-                        graphicState.Color = new GreyColorStatement(statement).Color;
-                    }
-                    else if (statement.EndsWith(" g"))
-                    {
-                        graphicState.Color = new GreyColorStatement(statement).Color;
                     }
                     else if (statement.EndsWith(" m"))
                     {
@@ -196,6 +208,10 @@ namespace BuildTablesFromPdf.Engine
                     else if (statement == "f")
                     {
                         page.Statements.Add(FillPathStatement.Value);
+                    }
+                    else if (currentMultilineStatement != null)
+                    {
+                        currentMultilineStatement.RawContent.Add(statement);
                     }
                     else
                     {

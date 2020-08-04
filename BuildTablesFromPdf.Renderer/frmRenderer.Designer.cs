@@ -30,10 +30,10 @@
         {
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnHtmlExport = new System.Windows.Forms.Button();
             this.btnCheckAllPages = new System.Windows.Forms.Button();
             this.btnViewRawContent = new System.Windows.Forms.Button();
             this.btnRead = new System.Windows.Forms.Button();
-            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
             this.label1 = new System.Windows.Forms.Label();
             this.txtPageContent = new System.Windows.Forms.TextBox();
             this.txtPage = new System.Windows.Forms.TextBox();
@@ -49,7 +49,9 @@
             this.chkParagraphs = new System.Windows.Forms.CheckBox();
             this.chkTables = new System.Windows.Forms.CheckBox();
             this.chkLines = new System.Windows.Forms.CheckBox();
-            this.btnHtmlExport = new System.Windows.Forms.Button();
+            this.chkIgnoreWhiteLines = new System.Windows.Forms.CheckBox();
+            this.chkShowParserInfo = new System.Windows.Forms.CheckBox();
+            this.fileOpen = new BuildTablesFromPdf.Renderer.FileOpen();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -83,6 +85,8 @@
             this.splitContainer.Panel1.Controls.Add(this.chkText);
             this.splitContainer.Panel1.Controls.Add(this.chkParagraphs);
             this.splitContainer.Panel1.Controls.Add(this.chkTables);
+            this.splitContainer.Panel1.Controls.Add(this.chkShowParserInfo);
+            this.splitContainer.Panel1.Controls.Add(this.chkIgnoreWhiteLines);
             this.splitContainer.Panel1.Controls.Add(this.chkLines);
             // 
             // splitContainer.Panel2
@@ -97,16 +101,27 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 52);
+            this.groupBox1.Location = new System.Drawing.Point(12, 70);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(284, 7);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             // 
+            // btnHtmlExport
+            // 
+            this.btnHtmlExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHtmlExport.Location = new System.Drawing.Point(192, 145);
+            this.btnHtmlExport.Name = "btnHtmlExport";
+            this.btnHtmlExport.Size = new System.Drawing.Size(104, 23);
+            this.btnHtmlExport.TabIndex = 8;
+            this.btnHtmlExport.Text = "Export to HTML";
+            this.btnHtmlExport.UseVisualStyleBackColor = true;
+            this.btnHtmlExport.Click += new System.EventHandler(this.btnHtmlExport_Click);
+            // 
             // btnCheckAllPages
             // 
             this.btnCheckAllPages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCheckAllPages.Location = new System.Drawing.Point(192, 107);
+            this.btnCheckAllPages.Location = new System.Drawing.Point(192, 116);
             this.btnCheckAllPages.Name = "btnCheckAllPages";
             this.btnCheckAllPages.Size = new System.Drawing.Size(104, 23);
             this.btnCheckAllPages.TabIndex = 8;
@@ -117,7 +132,7 @@
             // btnViewRawContent
             // 
             this.btnViewRawContent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnViewRawContent.Location = new System.Drawing.Point(192, 78);
+            this.btnViewRawContent.Location = new System.Drawing.Point(192, 87);
             this.btnViewRawContent.Name = "btnViewRawContent";
             this.btnViewRawContent.Size = new System.Drawing.Size(104, 23);
             this.btnViewRawContent.TabIndex = 8;
@@ -135,21 +150,6 @@
             this.btnRead.Text = "Read";
             this.btnRead.UseVisualStyleBackColor = true;
             this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
-            // 
-            // fileOpen
-            // 
-            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileOpen.BrowserCaption = "";
-            this.fileOpen.DefaultExtension = "";
-            this.fileOpen.FileFilters = "";
-            this.fileOpen.Folder = "";
-            this.fileOpen.Location = new System.Drawing.Point(12, 26);
-            this.fileOpen.Name = "fileOpen";
-            this.fileOpen.ReadOnly = false;
-            this.fileOpen.Size = new System.Drawing.Size(228, 20);
-            this.fileOpen.TabIndex = 6;
-            this.fileOpen.Value = null;
             // 
             // label1
             // 
@@ -243,7 +243,7 @@
             // lblPageSummary
             // 
             this.lblPageSummary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblPageSummary.Location = new System.Drawing.Point(12, 181);
+            this.lblPageSummary.Location = new System.Drawing.Point(12, 190);
             this.lblPageSummary.Name = "lblPageSummary";
             this.lblPageSummary.Size = new System.Drawing.Size(284, 17);
             this.lblPageSummary.TabIndex = 1;
@@ -252,7 +252,7 @@
             // chkTextRealSize
             // 
             this.chkTextRealSize.AutoSize = true;
-            this.chkTextRealSize.Location = new System.Drawing.Point(93, 147);
+            this.chkTextRealSize.Location = new System.Drawing.Point(93, 156);
             this.chkTextRealSize.Name = "chkTextRealSize";
             this.chkTextRealSize.Size = new System.Drawing.Size(69, 17);
             this.chkTextRealSize.TabIndex = 0;
@@ -263,7 +263,7 @@
             // chkText
             // 
             this.chkText.AutoSize = true;
-            this.chkText.Location = new System.Drawing.Point(12, 147);
+            this.chkText.Location = new System.Drawing.Point(12, 156);
             this.chkText.Name = "chkText";
             this.chkText.Size = new System.Drawing.Size(47, 17);
             this.chkText.TabIndex = 0;
@@ -276,7 +276,7 @@
             this.chkParagraphs.AutoSize = true;
             this.chkParagraphs.Checked = true;
             this.chkParagraphs.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkParagraphs.Location = new System.Drawing.Point(12, 124);
+            this.chkParagraphs.Location = new System.Drawing.Point(12, 133);
             this.chkParagraphs.Name = "chkParagraphs";
             this.chkParagraphs.Size = new System.Drawing.Size(80, 17);
             this.chkParagraphs.TabIndex = 0;
@@ -289,7 +289,7 @@
             this.chkTables.AutoSize = true;
             this.chkTables.Checked = true;
             this.chkTables.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTables.Location = new System.Drawing.Point(12, 101);
+            this.chkTables.Location = new System.Drawing.Point(12, 110);
             this.chkTables.Name = "chkTables";
             this.chkTables.Size = new System.Drawing.Size(58, 17);
             this.chkTables.TabIndex = 0;
@@ -302,7 +302,7 @@
             this.chkLines.AutoSize = true;
             this.chkLines.Checked = true;
             this.chkLines.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkLines.Location = new System.Drawing.Point(12, 78);
+            this.chkLines.Location = new System.Drawing.Point(12, 87);
             this.chkLines.Name = "chkLines";
             this.chkLines.Size = new System.Drawing.Size(51, 17);
             this.chkLines.TabIndex = 0;
@@ -310,16 +310,44 @@
             this.chkLines.UseVisualStyleBackColor = true;
             this.chkLines.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
             // 
-            // btnHtmlExport
+            // chkIgnoreWhiteLines
             // 
-            this.btnHtmlExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHtmlExport.Location = new System.Drawing.Point(192, 136);
-            this.btnHtmlExport.Name = "btnHtmlExport";
-            this.btnHtmlExport.Size = new System.Drawing.Size(104, 23);
-            this.btnHtmlExport.TabIndex = 8;
-            this.btnHtmlExport.Text = "Export to HTML";
-            this.btnHtmlExport.UseVisualStyleBackColor = true;
-            this.btnHtmlExport.Click += new System.EventHandler(this.btnHtmlExport_Click);
+            this.chkIgnoreWhiteLines.AutoSize = true;
+            this.chkIgnoreWhiteLines.Checked = true;
+            this.chkIgnoreWhiteLines.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIgnoreWhiteLines.Location = new System.Drawing.Point(12, 52);
+            this.chkIgnoreWhiteLines.Name = "chkIgnoreWhiteLines";
+            this.chkIgnoreWhiteLines.Size = new System.Drawing.Size(108, 17);
+            this.chkIgnoreWhiteLines.TabIndex = 0;
+            this.chkIgnoreWhiteLines.Text = "Ignore white lines";
+            this.chkIgnoreWhiteLines.UseVisualStyleBackColor = true;
+            this.chkIgnoreWhiteLines.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
+            // 
+            // chkShowParserInfo
+            // 
+            this.chkShowParserInfo.AutoSize = true;
+            this.chkShowParserInfo.Location = new System.Drawing.Point(143, 52);
+            this.chkShowParserInfo.Name = "chkShowParserInfo";
+            this.chkShowParserInfo.Size = new System.Drawing.Size(105, 17);
+            this.chkShowParserInfo.TabIndex = 0;
+            this.chkShowParserInfo.Text = "Show parser info";
+            this.chkShowParserInfo.UseVisualStyleBackColor = true;
+            this.chkShowParserInfo.CheckedChanged += new System.EventHandler(this.chk_CheckedChanged);
+            // 
+            // fileOpen
+            // 
+            this.fileOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileOpen.BrowserCaption = "";
+            this.fileOpen.DefaultExtension = "";
+            this.fileOpen.FileFilters = "";
+            this.fileOpen.Folder = "";
+            this.fileOpen.Location = new System.Drawing.Point(12, 26);
+            this.fileOpen.Name = "fileOpen";
+            this.fileOpen.ReadOnly = false;
+            this.fileOpen.Size = new System.Drawing.Size(228, 20);
+            this.fileOpen.TabIndex = 6;
+            this.fileOpen.Value = null;
             // 
             // frmRenderer
             // 
@@ -362,6 +390,8 @@
         private System.Windows.Forms.CheckBox chkTextRealSize;
         private System.Windows.Forms.Button btnCheckAllPages;
         private System.Windows.Forms.Button btnHtmlExport;
+        private System.Windows.Forms.CheckBox chkIgnoreWhiteLines;
+        private System.Windows.Forms.CheckBox chkShowParserInfo;
     }
 }
 

@@ -35,6 +35,8 @@ namespace BuildTablesFromPdf.Renderer
 
         private void ShowDocument(string fileName)
         {
+            ContentExtractor.ShowParserInfo = chkShowParserInfo.Checked;
+            ContentExtractor.IgnoreWhiteLines = chkIgnoreWhiteLines.Checked;
             _pages = ContentExtractor.Read(fileName);
             lblPages.Text = _pages.Count.ToString();
             DrawPage(0);
