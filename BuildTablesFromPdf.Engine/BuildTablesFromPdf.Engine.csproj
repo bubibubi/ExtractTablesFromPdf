@@ -53,6 +53,7 @@
     <Compile Include="CMap\NameCharacter.cs" />
     <Compile Include="CMap\NameCharacterCollection.cs" />
     <Compile Include="Color.cs" />
+    <Compile Include="FontInfo.cs" />
     <Compile Include="GraphicState.cs" />
     <Compile Include="IPageContent.cs" />
     <Compile Include="PageCollection.cs" />

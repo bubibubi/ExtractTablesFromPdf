@@ -96,7 +96,7 @@ namespace BuildTablesFromPdf.Engine.CMap
         {
             string bfChar;
             int beginBfCharPosition = s.IndexOf("beginbfchar", StringComparison.CurrentCultureIgnoreCase);
-            while (beginBfCharPosition == -1)
+            while (beginBfCharPosition != -1)
             {
                 beginBfCharPosition += 12;
 

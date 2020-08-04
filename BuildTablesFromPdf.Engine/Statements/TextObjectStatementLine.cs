@@ -1,15 +1,14 @@
 using System;
-using BuildTablesFromPdf.Engine.CMap;
 
 namespace BuildTablesFromPdf.Engine.Statements
 {
     public class TextObjectStatementLine : ICloneable
     {
-        public double FontHeight { get; set; }
         public Point Position { get; set; }
         public string Content { get; set; }
-        public CMapToUnicode CMapToUnicode { get; set; }
-        public EncodingDifferenceToUnicode EncodingDifferenceToUnicode { get; set; }
+        public FontInfo Font { get; set; }
+
+        public double FontHeight { get; set; }
 
         #region ICloneable Members
 
@@ -17,11 +16,10 @@ namespace BuildTablesFromPdf.Engine.Statements
         {
             return new TextObjectStatementLine()
             {
-                CMapToUnicode = CMapToUnicode,
-                FontHeight = FontHeight,
                 Position = Position,
                 Content = Content,
-                EncodingDifferenceToUnicode = EncodingDifferenceToUnicode
+                Font = Font,
+                FontHeight = FontHeight
             };    
         }
 
