@@ -190,7 +190,16 @@ namespace BuildTablesFromPdf.Engine
                         string escapedContent;
                         escapedContent = statement.Trim();
                         escapedContent = escapedContent.Remove(escapedContent.Length - 2);
-                        string content = PdfHexStringDataType.IsStartChar(escapedContent) ? PdfHexStringDataType.GetContent(escapedContent) : PdfStringDataType.GetContentFromEscapedContent(escapedContent);
+                        string content;
+                        if (PdfHexStringDataType.IsStartChar(escapedContent))
+                        {
+                            content = PdfHexStringDataType.GetContent(escapedContent);
+                        }
+                        else
+                        {
+                            escapedContent = escapedContent.Trim();
+                            content = PdfStringDataType.GetContentFromEscapedContent(escapedContent);
+                        }
 
                         var line = actualLineSettings.Clone();
                         line.FontHeight =
