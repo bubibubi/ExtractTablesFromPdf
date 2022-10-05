@@ -11,6 +11,8 @@ namespace BuildTablesFromPdf.Engine.Statements
             {
                 string[] parts = RawContent.Split(new [] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
+                if (parts.Length > 0 && parts[0].StartsWith("/P")) // based on a pattern space
+                    return Color.White;
                 if (parts.Length == 4)
                     return new Color(float.Parse(parts[0], NumberFormatInfo.InvariantInfo), float.Parse(parts[1], NumberFormatInfo.InvariantInfo), float.Parse(parts[2], NumberFormatInfo.InvariantInfo));
                 if (parts.Length == 2)
