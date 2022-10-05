@@ -64,6 +64,8 @@ namespace BuildTablesFromPdf.Engine
                     return;
                 else if (s[i] == ' ')
                     i++;
+                else if (s[i] == '\n')
+                    i++;
                 else
                     throw new ArgumentException(string.Format("{0} is not an array", s));
             }
