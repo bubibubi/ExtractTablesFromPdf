@@ -174,8 +174,6 @@ namespace BuildTablesFromPdf.Engine
                         actualLineSettings.Font = actualFont;
                         
                         string content = TextObjectStatement.GetTJContent(statement, actualLineSettings.Font.CMapToUnicode, actualLineSettings.Font.EncodingDifferenceToUnicode);
-                        if (string.IsNullOrEmpty(content))
-                            continue;
                         var line = actualLineSettings.Clone();
                         line.FontHeight =
                             line.Font.FontHeight * textTransformMatrix.a * (page.Rotation == 90 || page.Rotation == 270 ? baseTextTransformMatrix.b : baseTextTransformMatrix.a);
@@ -193,7 +191,7 @@ namespace BuildTablesFromPdf.Engine
                         string content;
                         if (string.IsNullOrEmpty(escapedContent))
                         {
-                            continue;
+                            content = "";
                         }
                         else if (PdfHexStringDataType.IsStartChar(escapedContent))
                         {
