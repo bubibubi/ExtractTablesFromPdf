@@ -12,7 +12,7 @@ namespace BuildTablesFromPdf.Engine
 
         public static bool IsStartChar(string content)
         {
-            return content[0] == '<';
+            return content.Length > 0 && content[0] == '<';
         }
 
 

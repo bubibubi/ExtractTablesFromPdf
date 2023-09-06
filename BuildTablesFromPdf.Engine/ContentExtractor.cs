@@ -191,7 +191,11 @@ namespace BuildTablesFromPdf.Engine
                         escapedContent = statement.Trim();
                         escapedContent = escapedContent.Remove(escapedContent.Length - 2);
                         string content;
-                        if (PdfHexStringDataType.IsStartChar(escapedContent))
+                        if (string.IsNullOrEmpty(escapedContent))
+                        {
+                            continue;
+                        }
+                        else if (PdfHexStringDataType.IsStartChar(escapedContent))
                         {
                             content = PdfHexStringDataType.GetContent(escapedContent);
                         }

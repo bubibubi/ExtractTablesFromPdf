@@ -39,7 +39,7 @@ namespace BuildTablesFromPdf.Engine
                     pdfArrayDataType.StringElements.Add(item);
                     pdfArrayDataType.Elements.Add(item);
                 }
-                if (PdfHexStringDataType.IsStartChar(s, i))
+                else if (PdfHexStringDataType.IsStartChar(s, i))
                 {
                     string item = PdfHexStringDataType.GetRawData(s, ref i);
                     pdfArrayDataType.StringElements.Add(item);
