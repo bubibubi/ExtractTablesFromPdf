@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="PdfArrayDataTypeTest.cs" />
     <Compile Include="SimpleTextExtractorTest.cs" />
     <Compile Include="BuildTablesFromPdfTest.cs" />
     <Compile Include="MHDiff.cs" />

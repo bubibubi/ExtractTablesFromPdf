@@ -77,7 +77,7 @@ namespace BuildTablesFromPdf.Engine
             return content[i] == '[';
         }
 
-        public static string GetRawData(string content, ref int i)
+        public static string GetRawData_(string content, ref int i)
         {
             if (!IsStartChar(content, i))
                 throw new ArgumentException("The content is not a PdfArrayDataType");
@@ -94,6 +94,53 @@ namespace BuildTablesFromPdf.Engine
             }
             return data;
         }
+
+        public static string GetRawData(string content, ref int i)
+        {
+            if (!IsStartChar(content, i))
+                throw new ArgumentException("The content is not a PdfArrayDataType");
+
+            string data = "[";
+
+            i++;
+            while (i < content.Length)
+            {
+                if (PdfStringDataType.IsStartChar(content, i))
+                {
+                    string item = PdfStringDataType.GetRawData(content, ref i);
+                    data += item;
+                }
+                else if (PdfHexStringDataType.IsStartChar(content, i))
+                {
+                    string item = PdfHexStringDataType.GetRawData(content, ref i);
+                    data += item;
+                }
+                else if (PdfNumericDataType.IsStartChar(content, i))
+                {
+                    string item = PdfNumericDataType.GetRawData(content, ref i);
+                    data += item;
+                }
+                else if (PdfArrayDataType.IsStartChar(content, i))
+                {
+                    string item = PdfArrayDataType.GetRawData(content, ref i);
+                    data += item;
+                }
+                else if (content[i] == ']')
+                {
+                    data += content[i];
+                    return data;
+                }
+                else if (content[i] == ' ')
+                    i++;
+                else if (content[i] == '\n')
+                    i++;
+                else
+                    throw new ArgumentException(string.Format("{0} is not an array", content));
+            }
+
+            return data;
+        }
+
 
     }
 }
