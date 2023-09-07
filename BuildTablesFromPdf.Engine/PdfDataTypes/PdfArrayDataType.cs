@@ -77,24 +77,6 @@ namespace BuildTablesFromPdf.Engine
             return content[i] == '[';
         }
 
-        public static string GetRawData_(string content, ref int i)
-        {
-            if (!IsStartChar(content, i))
-                throw new ArgumentException("The content is not a PdfArrayDataType");
-
-            int stackElements = 1;
-            string data = "[";
-            i++;
-            while (stackElements != 0)
-            {
-                data += content[i];
-                if (content[i] == '[') stackElements++;
-                if (content[i] == ']') stackElements--;
-                i++;
-            }
-            return data;
-        }
-
         public static string GetRawData(string content, ref int i)
         {
             if (!IsStartChar(content, i))
