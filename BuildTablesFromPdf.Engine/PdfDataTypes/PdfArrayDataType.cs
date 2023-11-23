@@ -110,6 +110,7 @@ namespace BuildTablesFromPdf.Engine
                 else if (content[i] == ']')
                 {
                     data += content[i];
+                    i++;
                     return data;
                 }
                 else if (content[i] == ' ')
