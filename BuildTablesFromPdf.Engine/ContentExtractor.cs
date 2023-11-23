@@ -208,6 +208,7 @@ namespace BuildTablesFromPdf.Engine
                             line.Font.FontHeight * textTransformMatrix.a * (page.Rotation == 90 || page.Rotation == 270 ? baseTextTransformMatrix.b : baseTextTransformMatrix.a);
                         line.Position = baseTextTransformMatrix.TransformPoint(new Point(textTransformMatrix.TransformX(textPosition.X, textPosition.Y + line.Font.FontHeight), textTransformMatrix.TransformY(textPosition.X, textPosition.Y + line.Font.FontHeight))).Rotate(page.Rotation);
                         line.Content = PdfFontHelper.ToUnicode(content, line.Font.CMapToUnicode, line.Font.EncodingDifferenceToUnicode);
+                        line.Content = line.Content.Replace("\0", "");
                         ((TextObjectStatement)currentMultilineStatement).Lines.Add(line);
                     }
                     else if (statement.Trim() == "ET")
